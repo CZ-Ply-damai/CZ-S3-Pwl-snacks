@@ -1,7 +1,7 @@
 spring:
    application:
       # 定义应用名
-      name: sq-config
+      name: sn-config
    cloud:
      config:
         server:

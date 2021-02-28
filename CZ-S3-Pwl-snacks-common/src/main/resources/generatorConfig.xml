@@ -14,22 +14,22 @@
 		</commentGenerator>
 
 		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
-			connectionURL="jdbc:mysql://127.0.0.1/C89-S3-Ply-sq" 
+			connectionURL="jdbc:mysql://127.0.0.1/cz-s2-pwl-snacks" 
 			userId="root" password="a">
 		</jdbcConnection>
 		
 		<!-- 实体类包名 -->
-		<javaModelGenerator targetPackage="com.yc.sq.bean"
+		<javaModelGenerator targetPackage="com.yc.sn.bean"
 			targetProject="src/main/java">
 			<property name="trimStrings" value="true" />
 		</javaModelGenerator>
 		<!-- Dao类包名 -->
-		<sqlMapGenerator targetPackage="com.yc.sq.dao"
+		<sqlMapGenerator targetPackage="com.yc.sn.dao"
 			targetProject="src/main/java">
 		</sqlMapGenerator>
 
 		<javaClientGenerator type="XMLMAPPER"
-			targetPackage="com.yc.sq.dao" targetProject="src/main/java">
+			targetPackage="com.yc.sn.dao" targetProject="src/main/java">
 		</javaClientGenerator>
 
 		<table tableName="%" >

@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yc.sn.dao.GoodsinfoMapper">
+  <resultMap id="BaseResultMap" type="com.yc.sn.bean.Goodsinfo">
+    <id column="gno" jdbcType="INTEGER" property="gno" />
+    <result column="gname" jdbcType="VARCHAR" property="gname" />
+    <result column="tno" jdbcType="INTEGER" property="tno" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="intro" jdbcType="VARCHAR" property="intro" />
+    <result column="balance" jdbcType="INTEGER" property="balance" />
+    <result column="pics" jdbcType="VARCHAR" property="pics" />
+    <result column="unit" jdbcType="VARCHAR" property="unit" />
+    <result column="qperied" jdbcType="VARCHAR" property="qperied" />
+    <result column="weight" jdbcType="VARCHAR" property="weight" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.yc.sn.bean.Goodsinfo">
+    <result column="descr" jdbcType="LONGVARCHAR" property="descr" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    gno, gname, tno, price, intro, balance, pics, unit, qperied, weight, status
+  </sql>
+  <sql id="Blob_Column_List">
+    descr
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.yc.sn.bean.GoodsinfoExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from goodsinfo
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.yc.sn.bean.GoodsinfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from goodsinfo
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from goodsinfo
+    where gno = #{gno,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from goodsinfo
+    where gno = #{gno,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yc.sn.bean.GoodsinfoExample">
+    delete from goodsinfo
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yc.sn.bean.Goodsinfo">
+    insert into goodsinfo (gno, gname, tno, 
+      price, intro, balance, 
+      pics, unit, qperied, 
+      weight, status, descr
+      )
+    values (#{gno,jdbcType=INTEGER}, #{gname,jdbcType=VARCHAR}, #{tno,jdbcType=INTEGER}, 
+      #{price,jdbcType=DECIMAL}, #{intro,jdbcType=VARCHAR}, #{balance,jdbcType=INTEGER}, 
+      #{pics,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, #{qperied,jdbcType=VARCHAR}, 
+      #{weight,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{descr,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yc.sn.bean.Goodsinfo">
+    insert into goodsinfo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="gno != null">
+        gno,
+      </if>
+      <if test="gname != null">
+        gname,
+      </if>
+      <if test="tno != null">
+        tno,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="intro != null">
+        intro,
+      </if>
+      <if test="balance != null">
+        balance,
+      </if>
+      <if test="pics != null">
+        pics,
+      </if>
+      <if test="unit != null">
+        unit,
+      </if>
+      <if test="qperied != null">
+        qperied,
+      </if>
+      <if test="weight != null">
+        weight,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="descr != null">
+        descr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="gno != null">
+        #{gno,jdbcType=INTEGER},
+      </if>
+      <if test="gname != null">
+        #{gname,jdbcType=VARCHAR},
+      </if>
+      <if test="tno != null">
+        #{tno,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="intro != null">
+        #{intro,jdbcType=VARCHAR},
+      </if>
+      <if test="balance != null">
+        #{balance,jdbcType=INTEGER},
+      </if>
+      <if test="pics != null">
+        #{pics,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="qperied != null">
+        #{qperied,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null">
+        #{weight,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="descr != null">
+        #{descr,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yc.sn.bean.GoodsinfoExample" resultType="java.lang.Long">
+    select count(*) from goodsinfo
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update goodsinfo
+    <set>
+      <if test="record.gno != null">
+        gno = #{record.gno,jdbcType=INTEGER},
+      </if>
+      <if test="record.gname != null">
+        gname = #{record.gname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tno != null">
+        tno = #{record.tno,jdbcType=INTEGER},
+      </if>
+      <if test="record.price != null">
+        price = #{record.price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.intro != null">
+        intro = #{record.intro,jdbcType=VARCHAR},
+      </if>
+      <if test="record.balance != null">
+        balance = #{record.balance,jdbcType=INTEGER},
+      </if>
+      <if test="record.pics != null">
+        pics = #{record.pics,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unit != null">
+        unit = #{record.unit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qperied != null">
+        qperied = #{record.qperied,jdbcType=VARCHAR},
+      </if>
+      <if test="record.weight != null">
+        weight = #{record.weight,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.descr != null">
+        descr = #{record.descr,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update goodsinfo
+    set gno = #{record.gno,jdbcType=INTEGER},
+      gname = #{record.gname,jdbcType=VARCHAR},
+      tno = #{record.tno,jdbcType=INTEGER},
+      price = #{record.price,jdbcType=DECIMAL},
+      intro = #{record.intro,jdbcType=VARCHAR},
+      balance = #{record.balance,jdbcType=INTEGER},
+      pics = #{record.pics,jdbcType=VARCHAR},
+      unit = #{record.unit,jdbcType=VARCHAR},
+      qperied = #{record.qperied,jdbcType=VARCHAR},
+      weight = #{record.weight,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER},
+      descr = #{record.descr,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update goodsinfo
+    set gno = #{record.gno,jdbcType=INTEGER},
+      gname = #{record.gname,jdbcType=VARCHAR},
+      tno = #{record.tno,jdbcType=INTEGER},
+      price = #{record.price,jdbcType=DECIMAL},
+      intro = #{record.intro,jdbcType=VARCHAR},
+      balance = #{record.balance,jdbcType=INTEGER},
+      pics = #{record.pics,jdbcType=VARCHAR},
+      unit = #{record.unit,jdbcType=VARCHAR},
+      qperied = #{record.qperied,jdbcType=VARCHAR},
+      weight = #{record.weight,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yc.sn.bean.Goodsinfo">
+    update goodsinfo
+    <set>
+      <if test="gname != null">
+        gname = #{gname,jdbcType=VARCHAR},
+      </if>
+      <if test="tno != null">
+        tno = #{tno,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="intro != null">
+        intro = #{intro,jdbcType=VARCHAR},
+      </if>
+      <if test="balance != null">
+        balance = #{balance,jdbcType=INTEGER},
+      </if>
+      <if test="pics != null">
+        pics = #{pics,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="qperied != null">
+        qperied = #{qperied,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null">
+        weight = #{weight,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="descr != null">
+        descr = #{descr,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where gno = #{gno,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yc.sn.bean.Goodsinfo">
+    update goodsinfo
+    set gname = #{gname,jdbcType=VARCHAR},
+      tno = #{tno,jdbcType=INTEGER},
+      price = #{price,jdbcType=DECIMAL},
+      intro = #{intro,jdbcType=VARCHAR},
+      balance = #{balance,jdbcType=INTEGER},
+      pics = #{pics,jdbcType=VARCHAR},
+      unit = #{unit,jdbcType=VARCHAR},
+      qperied = #{qperied,jdbcType=VARCHAR},
+      weight = #{weight,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      descr = #{descr,jdbcType=LONGVARCHAR}
+    where gno = #{gno,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yc.sn.bean.Goodsinfo">
+    update goodsinfo
+    set gname = #{gname,jdbcType=VARCHAR},
+      tno = #{tno,jdbcType=INTEGER},
+      price = #{price,jdbcType=DECIMAL},
+      intro = #{intro,jdbcType=VARCHAR},
+      balance = #{balance,jdbcType=INTEGER},
+      pics = #{pics,jdbcType=VARCHAR},
+      unit = #{unit,jdbcType=VARCHAR},
+      qperied = #{qperied,jdbcType=VARCHAR},
+      weight = #{weight,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER}
+    where gno = #{gno,jdbcType=INTEGER}
+  </update>
+</mapper>
