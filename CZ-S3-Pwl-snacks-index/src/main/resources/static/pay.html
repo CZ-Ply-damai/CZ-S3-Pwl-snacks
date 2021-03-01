@@ -1,0 +1,420 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>源辰-零食网支付</title>
+<meta name="keywords" content="小吃,美食,零食,源辰" />
+<meta name="description" content="各种小吃美食，应有尽有" />
+<link href="images/yc.png" rel="shortcut icon" type="image/x-icon" />
+<link href="css/header.css" rel="stylesheet" type="text/css" />
+<link href="css/pay.css" rel="stylesheet" type="text/css" />
+<link href="css/footer.css" rel="stylesheet" type="text/css" />
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/axios/0.19.2/axios.min.js"></script>
+<script type="text/javascript"
+	src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+</head>
+
+<body>
+<!-- 顶部区域 -->
+<header id="header">
+	<!-- 顶部标题区域 -->
+	<div class="htitle">
+    	<a href="#" target="_blank" class="location">衡阳</a>
+        
+        <div class="header-info">
+           <div v-if="showname" class="login-info">
+            	<a href="login.html" title="点击登录">您好，请登录</a>
+                <a href="register.html" title="点击注册"> 免费注册 </a>
+            </div>
+            <div v-if="!showname" class="login-info">
+            	<a href="#">{{list.nickName}}</a>
+            	<a href="#" @click="back">退出</a>
+            </div>
+            
+            <div class="person-info">
+            	<span>|</span>
+            	<a href="order.html" target="_blank">我的订单</a>
+                <span>|</span>
+                <a href="#" >我的小吃</a>
+                <span>|</span>
+                <a href="#" >客户服务</a>
+                <span>|</span>
+           		<a href="my.html" target="_blank">个人信息</a>
+            </div>
+        
+        </div>
+    </div>
+     <script type="text/javascript">
+    	var vname = new Vue({
+    		el:".htitle",
+    		data:{
+    			list:{},
+    			showname:true,
+    		},created(){
+    			axios.get("getName").then(res=>{					
+    				if(res.data){
+						this.showname=false;
+						this.list=res.data;
+					}else{
+						this.showname=true;
+						alert("请先登录");
+						location.href = "login.html";
+					}
+    			})
+    		},methods:{
+    			back(){
+    				if(confirm("确认退出吗")){
+    					location.href = "login.html";
+    				}
+    			}
+    		}
+    	})
+    </script>
+    <!-- 顶部搜索区域 -->
+    <div class="search">
+    	<!-- <div class="search_left">
+    		<a href="index.html" title="首页">
+            	<img src="images/logo.png" width="260px" height="120px"/> 
+            </a>
+        </div> -->
+        
+        <div class="search_right">
+        	<div class="search_top">
+                <div class="search_div">
+                    <input v-model="gname" type="search" class="search-ipt" placeholder="请输入要搜索的内容" />
+                    <input @click="search" type="button" class="search-btn"/>  
+                </div>
+                <div class="buycart">
+                	<i class="iconfont" id="iconfont">{{nums}}</i>
+                    <a href="cart.html" >我的购物车</a>
+                </div>
+            </div>
+            
+            <div class="search_item" id="search_item">
+            	<a href="index.html" class="selected">全部</a>
+            	<a v-for="i in stypelist" :href="'index.html?' + Math.random() + '#' + i.tno">{{i.tname}}</a>
+            </div>
+        </div>
+    </div>
+    
+    <script type="text/javascript">
+    	var vsearch = new Vue({
+    		el:".search",
+    		data:{
+    			nums:0,
+    			list:{},
+    			stypelist:{},
+    			gname:"",
+    		},created(){
+    			axios.get("cart").then(res=>{
+					this.list = res.data;
+					this.nums = this.list.length;
+				});
+    			axios.get("stype").then(res=>{
+    				this.stypelist = res.data;
+    			})
+    		},methods:{
+    			search(){
+    				location.href = "index.html?gn="+this.gname;
+    			}
+    		}
+    	})
+    </script>
+</header>
+
+<div id="addor"> 
+<!-- 收货地址 -->
+<h3 class="common_title">确认收货地址</h3>
+
+<div id="add" class="common_list_con clearfix">
+    <input type="hidden" id="default_addr"/>
+    <input type="hidden" id="current_addr"/>
+   
+   
+    <dl id="addr_list">
+        <dt>寄送到：</dt>
+        <dd v-for="(a,index) in addrlist" :class=" active == index ? 'current_location' : 'default_location'">
+        {{a.province}} {{a.city}} {{a.area}} {{a.addr}}  （{{a.name}} 收） {{a.tel}}
+        	<a v-if="a.flag==0" href="#" @click="changeFlag(index)">设为默认</a>
+        	<a @click="changeAddr(index)" href="#">设为当前收货地址</a>
+        </dd>
+        <!-- <dd class="current_location">北京市 海淀区 东北旺西路8号中关村软件园 （李思 收） 159****0775 
+			<a href="javascript:void(0)">设为默认</a></dd>
+		<dd class="default_location">北京市 海淀区 东北旺西路8号中关村软件园 （李思 收） 159****0775 
+			<a href="javascript:void(0)">设为默认</a>
+			<a href="javascript:void(0)">设为当前收货地址</a>
+		</dd> -->
+	</dl>
+    <a href="javascript:showAddrDiv()" class="edit_site">编辑收货地址</a>
+</div>
+
+
+
+
+<div id="addr_div">
+    <img src="images/close.png" title="关闭" onclick="hiddenDiv()"/>
+    <form id="myform">
+        <ul>
+            <li>
+                <label for="addr_name" >收货人：</label>
+                <input id="addr_name"  v-model="a.name" name="name" type="text" placeholder="请输入收货人姓名..." />
+            </li>
+            <li>
+                <label for="addr_tel" >联系方式：</label>
+                <input id="addr_tel" v-model="a.tel" name="tel" type="text" placeholder="请输入收货人联系方式..." />
+            </li>
+            <li>
+                <label >收货地址：</label>
+                <select   id="province" name="province">
+                	<option value="0">--请选择省份--</option>
+                </select>
+                <select  id="city" name="city">
+                    <option value="0">--请选择城市--</option>
+                </select>
+                <select  id="area" name="area">
+                    <option value="0">--请选择地区--</option>
+                </select>
+            </li>
+            <li>
+                <label  for="addr_addr">详细地址：</label>
+                <input id="addr_addr" v-model="a.addr" name="addr" style='width: 480px;' type="text" placeholder="请输入详细地址（街道、门牌等）" />
+            </li>
+            <li class="addr_btn">
+               <a @click="addAddr" href="#"  >添加</a>
+            </li>
+        </ul>
+    </form>
+</div>
+<!--  
+<script type="text/javascript">
+var add = new Vue({
+	el: "#myform",
+	data:{		
+	},
+	methods:{		
+    	}
+	
+})
+</script>-->
+
+<!-- 支付方式 -->	
+<h3 class="common_title">支付方式</h3>	
+<div class="common_list_con clearfix">
+    <div class="pay_style_con clearfix">
+        <input type="radio" name="pay_style" checked>
+        <label class="cash">货到付款</label>
+        <input type="radio" name="pay_style">
+        <label class="weixin">微信支付</label>
+        <input type="radio" name="pay_style">
+        <label class="zhifubao"></label>
+        <input type="radio" name="pay_style">
+        <label class="bank">银行卡支付</label>
+    </div>
+</div>
+
+<!-- 商品列表 -->
+<h3 class="common_title">商品列表</h3>
+<div class="common_list_con clearfix" id="order_list">
+    <ul class="goods_list_th clearfix">
+        <li class="col01">商品名称</li>
+        <li class="col02">商品单位</li>
+        <li class="col03">商品价格</li>
+        <li class="col04">数量</li>
+        <li class="col05">小计</li>		
+    </ul>
+    <ul v-for="(i,index) in list" class="goods_list_td clearfix">
+        <li class="col01">{{index+1}}</li>			
+        <li class="col02"><img :src="i.pics"></li>
+        <li class="col03">{{i.gname}}</li>
+        <li class="col04">{{i.unit}}</li>
+        <li class="col05">{{i.price}}元</li>
+        <li class="col06">{{nums[index]}}</li>
+        <li class="col07">{{nums[index]*i.price}}元</li>	
+    </ul>
+
+</div>
+
+ 
+<!-- 金额结算 -->	
+<h3 class="common_title">总金额结算</h3>
+
+<div class="common_list_con clearfix">
+    <div class="settle_con">
+        <div class="total_goods_count">共{{num}}<em id="totalcount"></em>件商品，总金额 {{o.allpri}}<b  id="total_price"></b></div>
+        <div class="transit">运费：<b>10元</b></div>
+        <div class="total_pay">实付款：{{o.allpri+10}}<b id="total_pay"></b></div>
+    </div>
+</div>
+<div class="order_submit clearfix">
+    <a href="javascript:void(0);" @click="sub" id="order_btn">提交订单</a>
+    
+</div>	
+</div>
+<script type="text/javascript">
+var vue= new Vue({
+		el:"#addor",
+		data:{
+			a:{
+				name:"",
+				tel:"",
+				addr:"",
+				province:"",
+				area:"",
+				city:"",
+			},			
+			list:[],
+ 			nums:[],
+ 			addrlist:[],
+ 			num:0,
+ 			active:0,
+			o:{
+				allpri:0,
+				ano:1
+			}
+		},created(){
+			axios.get("getNums").then(res=>{
+ 				this.nums = res.data;
+ 				//console.info(this.nums[2]);
+ 			});
+ 			axios.get("getGoods").then(res=>{
+ 				this.list = res.data;
+ 				for(var i = 0; i < this.list.length; i++){
+ 					this.o.allpri+=this.list[i].price*this.nums[i];
+ 					this.num+=this.nums[i];
+ 				};
+ 			});
+ 			axios.get("queryAddr").then(res=>{
+ 				for(var i in res.data){
+ 					res.data[i].tel = "" + res.data[i].tel;
+ 					var reg=/(\d{3})\d{4}(\d{4})/;
+ 					res.data[i].tel = res.data[i].tel.replace(reg, "$1****$2");
+ 				}
+				this.addrlist = res.data;			
+			})
+ 		},methods:{
+			sub(){
+				var params = new URLSearchParams();
+				params.append("price",this.o.allpri);
+				params.append("ano",this.o.ano);
+				axios.post("addorder",params).then(res=>{
+					$("#popup_info").text("提交订单成功,即将跳转到支付页面");
+    				showMsg();
+					axios.post("queryMaxorder").then(res1=>{	
+						setTimeout(function(){
+							location.href="index?ono="+res1.data;
+						},700)
+					});
+				});
+			},
+			addAddr(){
+				var she=document.getElementById("province");
+				var index1=she.selectedIndex;
+				//console.info(she);
+				var shi=document.getElementById("city");
+				var index2=shi.selectedIndex;
+				var xia=document.getElementById("area");
+				var index3=xia.selectedIndex;
+				this.a.province=she.options[index1].value;
+				this.a.city=shi.options[index2].value;
+				this.a.area=xia.options[index3].value;
+	    		var param = new URLSearchParams();
+	    		
+	    		param.append("name",this.a.name);
+	    		param.append("tel",this.a.tel);
+	    		param.append("addr",this.a.addr);
+	    		param.append("city",this.a.city);
+	    		param.append("province",this.a.province);
+	    		param.append("area",this.a.area);
+	    		axios.post("addresinfo",param).then(res=>{
+	    			if(res.data.code==1){
+	    				$("#popup_info").text(res.data.msg);
+	    				showMsg();
+	    				axios.get("queryAddr").then(res=>{
+	    					this.addrlist = res.data;			
+	    				})
+	    			}else{
+	    				$("#popup_info").text(res.data.msg);
+	    				showMsg();
+	    			}	    			
+	    		}) 		
+			},changeAddr(index){
+				this.active = index;
+			},changeFlag(index){
+				for(var i in this.addrlist){
+					if(this.addrlist[i].flag==1){
+						this.addrlist[i].flag = 0;
+						axios.get("changeFlag?ano="+this.addrlist[i].ano
+								+"&flag="+this.addrlist[i].flag)
+					}
+				}
+				this.addrlist[index].flag = 1;
+				axios.get("changeFlag?ano="+this.addrlist[index].ano
+						+"&flag="+this.addrlist[index].flag).then(res=>{
+							if(res.data.code==1){
+			    				$("#popup_info").text(res.data.msg);
+			    				showMsg();
+			    				setTimeout(function(){
+								},700)
+			    				axios.get("queryAddr").then(res=>{
+				    				this.addrlist = res.data;			
+				    			});	    				
+			    			}else{
+			    				$("#popup_info").text(res.data.msg);
+			    				showMsg();
+			    			}
+						})
+			}
+		}
+ 	})
+ 	
+ 	
+function showMsg(){
+	$('.popup_con').fadeIn('fast', function(){
+		setTimeout(function(){
+			$('.popup_con').fadeOut('fast',function(){
+				// location.href = 'alipay/pay/' + data.msg +"/" + price;
+			});	
+		}, 1000)
+	});
+}
+ </script>
+ 
+
+
+
+
+<div class="popup_con">
+	<div class="popup">
+		<p id="popup_info"></p>
+	</div>
+</div>  
+        
+<footer>
+	<div class="foot_link">
+        <a href="#">关于我们</a> <span> | </span>
+        <a href="#">联系我们</a> <span> | </span>
+        <a href="#">招聘广告</a> <span> | </span>
+        <a href="#">友情链接</a>
+    </div>
+    <p>CopyRight &copy; 2019 <a class="copy" href="http://www.hyycinfo.com" target="_blank">衡阳市源辰信息科技有限公司</a> All Rights Reserverd</p>
+    <p>电话：0734-8355998 湘ICP备16015987号-1</p>
+</footer>
+
+<script src="js/jquery-3.4.1.min.js"></script>
+<script src="js/addr.js"></script>
+
+<script type="text/javascript">
+
+function showAddrDiv() {
+	$("#addr_div").css("display", "block");
+}
+
+function hiddenDiv() {
+	$("#addr_div").css("display", "none");
+}
+</script>
+</body>
+</html>

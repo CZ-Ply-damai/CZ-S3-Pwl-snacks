@@ -1,117 +1,257 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<script src="res/push.js"></script>
-<script type="text/javascript">
-	if (/Android|webOS|iPhone|iPod|iPad|Windows Phone|BlackBerry|Mobile/i
-			.test(navigator.userAgent)) {
-		var url = window.location.pathname + window.location.search;
-		window.location.href = 'https://m.sq688.com' + url;
-	}
-</script>
-<link rel="shortcut icon" type="image/ico" href="https://www.sq688.com/favicon.ico">
-<meta name="applicable-device" content="pc">
-<meta name="mobile-agent" content="format=html5;url=https://m.sq688.com/my">
-<link rel="alternate" media="only screen and(max-width: 800px)" href="https://m.sq688.com/my">
-<title>无损分享_无损音乐下载_FLAC_WAV_APE_DSD_SQ688_超高无损音乐</title>
-<meta name="keywords" content="无损分享,无损音乐下载,FLAC,WAV,APE,DSD,SQ688超高无损音乐">
-<link rel="stylesheet" type="text/css" href="res/main.css">
-<link rel="stylesheet" type="text/css" href="res/font-awesome.css">
+<meta charset="utf-8">
+<title>源辰-零食网注册</title>
+<meta name="keywords" content="小吃,美食,零食,源辰" />
+<meta name="description" content="各种小吃美食，应有尽有" />
+<link href="images/yc.png" rel="shortcut icon" type="image/x-icon"/>
+<link rel="stylesheet" href="css/register.css">
+<link rel="stylesheet" href="css/footer.css">
+<link href="images/yc.png" rel="shortcut icon" type="image/x-icon" />
+<link href="css/header.css" rel="stylesheet" type="text/css" />
+<link href="css/index.css" rel="stylesheet" type="text/css" />
+<link href="css/footer.css" rel="stylesheet" type="text/css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/axios/0.19.2/axios.min.js"></script>
+<script type="text/javascript"
+	src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+	<style type="text/css">
+.span24 dt {
+    font-size: 15px;
+    line-height: 28px;
+    margin: 5px 10px 1px 0;
+    color: #f40;
+    *margin-bottom: 3px;
+}
+.main_left{
+    width: 80%px;
+    height: 200%;
+    float:right;
+    background:#c0c0c0;
+    cursor:pointer;
+}
+/*下面的星号让素有元素内外边距都为0，不留空隙*/
+			*{
+				padding:0px;
+				margin:0px;
+			/*我们让整个屏幕都有一种淡淡的背景色*/
+			}
+
+			/*下面这个box是承载全部网页内容的容器样式，是下面所有div元素的父级元素的样式，注意一定要先将字号设为0，否则主体和页脚之间会有一条白色缝隙*/
+			#box{
+				width:900px;
+				margin:0 auto;
+			}
+			#logo{
+				height:100px;
+				background-color:orange;
+			}
+			#nav{
+				display:inline-block;
+				width:100px;
+				height:600px;
+				
+				
+			}
+			#main{
+				display:inline-block;
+				width:800px;
+				height:600px;
+				float:right;
+				
+			}
+</style>
 </head>
+
 <body>
-	<div id="header" class="header">
-		<div class="warp">
-			<div class="logo">
-				<h1>超高无损音乐</h1>
-				<p>SQ688.com</p>
-			</div>
-			<ul class="menu">
-				<li><a href="https://www.sq688.com/" class="cur">首页</a></li>
-				<li><a href="https://www.sq688.com/singer/10001.html">华语男歌手</a></li>
-				<li><a href="https://www.sq688.com/singer/10002.html">华语女歌手</a></li>
-				<li><a href="https://www.sq688.com/singer/10003.html">华语乐队</a></li>
-				<li><a href="https://www.sq688.com/singer/10005.html">欧美歌手</a></li>
-				<li><a href="https://www.sq688.com/singer/10006.html">日韩歌手</a></li>
-				<li><a href="https://www.sq688.com/singer/10004.html">专辑合集</a></li>
-				<li><a href="https://www.sq688.com/share.html">网友分享</a></li>
-				<li><a href="https://www.sq688.com/yx/">安卓游戏</a></li>
-				<li><a href="https://www.sq688.com/software/">安卓软件</a></li>
-			</ul>
-			<div class="users">
-				<p>
-					<a href="https://www.sq688.com/member" style="color: rgb(33, 127, 188);"><i class="fa fa-user"></i> 光影</a>欢迎回来
-				</p>
-			</div>
-			<div class="clear"></div>
-		</div>
-		<div class="search-bar">
-			<div class="bar">
-				<div class="wrp">
-					<input type="text" id="keyword" placeholder="请输入歌曲名称或者歌手" class="kk"> <a href="javascript:;" id="btn_search" class="bb"><i class="fa fa-search"></i></a>
-					<div class="clear"></div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div id="member" class="member">
-		<div class="m-left">
-			<div class="top">
-				<div class="avt">
-					<img src="res/male.jpg">
-				</div>
-				<div class="info">
-					<h4>光影</h4>
-					<p>
-						<span class="tag">标品</span>
-					</p>
-				</div>
-				<div class="cer">
-					<ul class="menu">
-						<li><a href="https://www.sq688.com/member"><i class="fa fa-navicon"></i> 用户中心</a></li>
-						<li><a href="https://www.sq688.com/setting"><i class="fa fa-user"></i> 个人信息</a></li>
-						<li><a href="https://www.sq688.com/my" class="cur"><i class="fa fa-music"></i> 无损分享</a></li>
-						<li><a href="javascript:alert(&#39;功能开发中,稍后更新&#39;)"><i class="fa fa-star"></i> 音乐收藏</a></li>
-						<li><a href="javascript:void();"><i class="fa fa-sign-out"></i> 退出登录</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		<div class="m-right">
-			<div class="cts">
-				<div class="add">
-					<button class="btn-save">分享音乐</button>
-				</div>
-				<table class="shr">
-					<tbody>
-						<tr>
-							<th>标题</th>
-							<th>发布时间</th>
-							<th>状态</th>
-							<th>赞</th>
-							<th>操作</th>
-						</tr>
-					</tbody>
-				</table>
-				<div class="mypage">
-					<a href="https://www.sq688.com/my?page=0" class="back">上一页</a> <span class="total">1/1</span> <a href="javascript:void(0);" class="next">下一页</a>
-				</div>
-			</div>
-		</div>
-	</div>
+<header id="header">
+	<!-- 顶部标题区域 -->
+	<div class="htitle">
+    	<a href="#" target="_blank" class="location">衡阳</a>
+        
+        <div class="header-info">
+            <div v-if="showname" class="login-info">
+            	<a href="login.html" title="点击登录">您好，请登录</a>
+                <a href="register.html" title="点击注册"> 免费注册 </a>
+            </div>
+            <div v-if="!showname" class="login-info">
+            	<a href="#">{{list.nickName}}</a>
+            	<a href="#" @click="back">退出</a>
+            </div>
+            
+            <div class="person-info">
+            	<span>|</span>
+            	<a href="order.html" >我的订单</a>
+                <span>|</span>
+                <a href="#" target="_blank">我的小吃</a>
+                <span>|</span>
+                <a href="#" target="_blank">客户服务</a>
+                <span>|</span>
+           		<a href="#" target="_blank">个人信息</a>
+            </div>
+        
+        </div>
+    </div>
+    
+    <script type="text/javascript">
+    	var vname = new Vue({
+    		el:".htitle",
+    		data:{
+    			list:{},
+    			showname:true,
+    		},created(){
+    			axios.get("getName").then(res=>{  				
+    				if(res.data){
+						this.showname=false;
+						this.list=res.data;
+					}else{
+						this.showname=true;						
+					}
+    			})
+    		},methods:{
+    			back(){
+    				if(confirm("确认退出吗")){
+    					location.href = "login.html";
+    				}
+    			}
+    		}
+    	})
+    </script>
 
-	<div class="footer">
-		<div class="warp">
-			Copyright 2015-2018 SQ688.com 超高无损音乐<br>本站所有数据均系网友搜集自互联网后分享,本站服务器不存储任何音乐文件,也无意侵犯您的版权,如若任何人声称是任何音乐的版权所有人,请联系sqshangwu@gmail.com,本站会尽快删除,<br>郑重声明本站旨在无损音乐交流分享,不与任何淘宝店铺或机构合作参与任何形式的获利行为,敬请网友注意谨防受骗! <br> 桂ICP备13001859号-4
-			<script type="text/javascript" src="res/z_stat.php"></script>
-			<script src="res/core.php" charset="utf-8" type="text/javascript"></script>
-			<a href="https://www.cnzz.com/stat/website.php?web_id=1277751974" target="_blank" title="站长统计">站长统计</a> <br> 本站唯一QQ群(892306409)欢迎各大音乐爱好者加入 <a target="_blank" href="https://shang.qq.com/wpa/qunwpa?idkey=40edf9935a8deb7a8eeb6e93853111156fb280203fb799c7d11471aea22304fb"> <img border="0" src="res/group.png" alt="超高无损音乐|SQ688" title="超高无损音乐|SQ688"></a>
-		</div>
-	</div>
+    
+    <!-- 顶部搜索区域 -->
+   
+    
+    <script type="text/javascript">
+    	var vtype = new Vue({
+    		el:".search",
+    		data:{
+    			list:{},
+    			carts:{},
+    			gname:"",
+    			active:-1,
+    			nums:0,
+    		},created(){
+    			axios.get("stype").then(res=>{
+    				this.list = res.data;
+    				if(vname.showname==false){
+        				axios.get("cart").then(res=>{
+        					if(res.data!=null){
+	        					this.carts = res.data;
+	        					this.nums = this.carts.length;
+        					}
+        				});
+        			}
+    			});  			
+    		},methods:{
+    			search(){
+    				this.active = -1;
+    				vgood.pageIndex = 1;
+    				vgood.tno = "";
+    				vgood.gname = this.gname;
+    				queryPages();
+    			},changeStype(e,index){
+    				vgood.tno = e.target.name;
+    				this.active = index;
+    				$(".selected").removeClass(".selected");
+    				vgood.pageIndex = 1;  				
+    				this.gname = "";
+    				axios.get("StypeGood?tno="+vgood.tno+"&pageIndex="+vgood.pageIndex)
+					.then(res=>{
+    					queryPages();
+    				})
+    			},cart(){
+    				if(vname.showname==true){
+    					alert("请先登录");
+    					location.href = "login.html";
+    				}else{
+    					location.href = "cart.html";
+    				}
+    			}
+    		}
+    	})
+    </script>
+</header>
 
-	<!--页面脚本-->
-	<script type="text/javascript" src="res/vue.min.js"></script>
-	<script type="text/javascript" src="res/jquery-1.8.3.min.js"></script>
-	<script type="text/javascript" src="res/clipboard.js"></script>
+<!-- 注册布局 -->
+<div id="box">
+			<div id='nav'>
+				<ul type='none' style="font-size:20px;color:red;  margin-left:10px;margin-top:30px;">
+					<li>个人中心</li>
+				</ul>
+				<ul type='none' style="font-size:12px;margin-left:10px;margin-top:30px;">
+					<li><a href="my.html" src="#">个人资料</a></li>
+					<li><a href="order.html" target="_blank">我的订单</a></li>
+					<li><a href="cart.html" target="_blank">我的购物车</a></li>
+					<li><a href="addr.html" target="_blank"> 我的地址</a></li>
+				</ul>
+			</div>
+			<div id='main'>
+				<!-- 右侧内容 -->
+			        <div class="main_right">
+			        	<ul   style="text-align: center;">
+			        	<br><br>
+			        	   <li>
+			        			当前头像:<img :src="g.photo"><br><br>
+			        		</li><br><br>
+			        		<li>
+			        			用户名:<input :value="g.nickName"> </input><br><br>
+			        		</li><br><br>
+			        		<li>
+			        			电话：<input :value="g.tel"> </input><br><br>
+			        		</li><br><br>
+			        		<li>
+			        			邮箱：<input :value="g.email"> </input><br><br>
+			        		</li><br><br>
+
+			        		<li>
+			        			注册时间:<input :value="g.regDate"> </input>
+			        		</li>
+			        	
+			        	</ul>
+
+			            
+			        </div>
+			</div>
+		<script type="text/javascript">
+			var vue1=new Vue({
+				el:"#box",
+				data:{
+
+					g:[]
+					
+				},created(){
+					axios.get("getName").then(res=>{  				
+	    				this.g=res.data;
+	    			})
+				},
+			methods:{
+
+			}
+				
+				
+			})
+		
+		</script>
+		</div>
+<div class="popup_con">
+	<div class="popup">
+		<p id="popup_info"></p>
+	</div>
+</div>
+<!-- 版权所有 -->
+<footer>
+	<div class="foot_link">
+        <a href="#">关于我们</a> <span> | </span>
+        <a href="#">联系我们</a> <span> | </span>
+        <a href="#">招聘广告</a> <span> | </span>
+        <a href="#">友情链接</a>
+    </div>
+    <p>CopyRight &copy; 2019 <a class="copy" href="http://www.hyycinfo.com" target="_blank">衡阳市源辰信息科技有限公司</a> All Rights Reserverd</p>
+    <p>电话：0734-8355998 湘ICP备16015987号-1</p>
+</footer>
+<script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+<script src="js/register.js"></script>
 </body>
 </html>

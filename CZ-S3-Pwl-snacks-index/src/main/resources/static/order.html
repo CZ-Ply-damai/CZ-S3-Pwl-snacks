@@ -1,0 +1,228 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>源辰-零食网订单</title>
+<meta name="keywords" content="小吃,美食,零食,源辰" />
+<meta name="description" content="各种小吃美食，应有尽有" />
+<link href="images/yc.png" rel="shortcut icon" type="image/x-icon" />
+<link href="css/header.css" rel="stylesheet" type="text/css" />
+<link href="css/order.css" rel="stylesheet" type="text/css" />
+<link href="css/footer.css" rel="stylesheet" type="text/css" />
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/axios/0.19.2/axios.min.js"></script>
+<script type="text/javascript"
+	src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+</head>
+
+<body>
+<!-- 顶部区域 -->
+<header id="header">
+	<!-- 顶部标题区域 -->
+	<div class="htitle">
+    	<a href="#" target="_blank" class="location">衡阳</a>
+        
+        <div class="header-info">
+            <div v-if="showname" class="login-info">
+            	<a href="login.html" title="点击登录">您好，请登录</a>
+                <a href="register.html" title="点击注册"> 免费注册 </a>
+            </div>
+            <div v-if="!showname" class="login-info">
+            	<a href="#">{{list.nickName}}</a>
+            	<a href="#" @click="back">退出</a>
+            </div>
+            
+            <div class="person-info">
+            	<span>|</span>
+            	<a href="order.html">我的订单</a>
+                <span>|</span>
+                <a href="#">我的小吃</a>
+                <span>|</span>
+                <a href="#">客户服务</a>
+                <span>|</span>
+           		<a @click="my" href="#" target="_blank">个人信息</a>
+            </div>
+        
+        </div>
+    </div>
+    <script type="text/javascript">
+    	var vname = new Vue({
+    		el:".htitle",
+    		data:{
+    			list:{},
+    			showname:true,
+    		},created(){
+    			axios.get("getName").then(res=>{					
+    				if(res.data){
+						this.showname=false;
+						this.list=res.data;
+					}else{
+						this.showname=true;
+						alert("请先登录");
+						location.href = "login.html";
+					}
+    			})
+    		},methods:{
+    			back(){
+    				if(confirm("确认退出吗")){
+    					location.href = "login.html";
+    				}
+    			},my(){
+    				if(this.showname==true){
+    					$("#popup_info").text("您还未登录...");
+    					showMsg();
+    				}else{
+    					location.href = "my.html";
+    				}
+    			}
+    		}
+    	})
+    </script>
+    <!-- 顶部搜索区域 -->
+    <div class="search">
+    	<!-- <div class="search_left">
+    		<a href="index.html" title="首页">
+            	<img src="images/logo.png" width="260px" height="120px"/> 
+            </a>
+        </div> -->
+        
+        <div class="search_right">
+        	<div class="search_top">
+                <div class="search_div">
+                    <input v-model="gname" type="search" class="search-ipt" placeholder="请输入要搜索的内容" />
+                    <input @click="search" type="button" class="search-btn"/>  
+                </div>
+                <div class="buycart">
+                	<i class="iconfont" id="iconfont">{{nums}}</i>
+                    <a href="#"  @click="cart">我的购物车</a>
+                </div>
+            </div>
+            
+            <div class="search_item" id="search_item">
+            	<a href="index.html" class="selected">全部</a>
+            	<a v-for="i in stypelist" :href="'index.html?' + Math.random() + '#' + i.tno">{{i.tname}}</a>
+            </div>
+        </div>
+    </div>
+    
+     <script type="text/javascript">
+    	var vsearch = new Vue({
+    		el:".search",
+    		data:{
+    			nums:0,
+    			list:{},
+    			stypelist:{},
+    			gname:"",
+    		},created(){
+    			axios.get("cart").then(res=>{
+					this.list = res.data;
+					this.nums = this.list.length;
+				});
+    			axios.get("stype").then(res=>{
+    				this.stypelist = res.data;
+    			})
+    		},methods:{
+    			search(){
+    				location.href = "index.html?gn="+this.gname;
+    			},cart(){
+    				if(vname.showname==true){
+    					$("#popup_info").text("您还未登录...");
+    					showMsg();
+    					setTimeout(function(){
+    						location.href = "login.html";
+						},1000)    					
+    				}else{
+    					location.href = "cart.html";
+    				}
+    			}
+    		}
+    	})
+    </script>
+</header>
+     
+<!-- 订单列表 -->
+<div class="common_list_con clearfix" id="order_list">
+    <ul class="goods_list_th clearfix">
+        <li class="col01">商品名称</li>
+        <li class="col03">商品单位</li>
+        <li class="col03">商品价格</li>
+        <li class="col02">数量</li>
+        <li class="col03">小计</li>		
+    </ul>
+</div>
+<div class="order_list_con" id="order_list">
+    
+    <div v-for="o in olist">
+	    <div class="order_title">
+	    	<span>订单号： {{o.ono}}</span><span>下单日期： {{o.odate}}</span><span>订单总额：<b style="color:red">{{o.price}}</b> 元</span>
+	    	<a v-if="o.status==1" @click="go(o.ono)">未支付，去支付</a>
+	    	<a v-if="o.status==2">已支付</a>
+	    	<a v-if="o.status==3">已收货</a>
+	    </div>
+	    <ul v-for="oi in oilist" v-if="o.ono==oi.ono" class="goods_list_td clearfix">
+	        <li class="col01">{{oi.gno}}</li>			
+	        <li class="col02"><img :src="oi.pics"></li>
+	        <li class="col03">{{oi.gname}}</li>
+	        <li class="col04">{{oi.weight}}</li>
+	        <li class="col04">{{oi.price}}元</li>
+	        <li class="col03">{{oi.nums}}</li>
+	        <li class="col04">{{oi.price*oi.nums}}元</li>	
+	    </ul>
+    </div>
+</div>
+
+<script type="text/javascript">
+    	var vname = new Vue({
+    		el:".order_list_con",
+    		data:{
+    			olist:[],
+    			oilist:[],
+    		},created(){
+    			axios.get("order.s?op=queryorder").then(res=>{					
+    				this.olist=res.data;
+    					
+    			});	
+    			axios.get("order.s?op=queryorderitem").then(r=>{					
+    				this.oilist=r.data;
+    			})
+    		},
+    		methods:{
+    			go(ono){
+    				location.href="index?ono="+ono;
+    			}
+    		}
+    	})
+    	 function showMsg(){
+    		$('.popup_con').fadeIn('fast', function(){
+    			setTimeout(function(){
+    				$('.popup_con').fadeOut('fast',function(){
+    					// location.href = 'alipay/pay/' + data.msg +"/" + price;
+    				});	
+    			}, 1000)
+    		});
+    	}
+    </script>
+
+    <div class="popup_con">
+    	<div class="popup">
+    		<p id="popup_info"></p>
+    	</div>
+    </div> 
+        
+<footer>
+	<div class="foot_link">
+        <a href="#">关于我们</a> <span> | </span>
+        <a href="#">联系我们</a> <span> | </span>
+        <a href="#">招聘广告</a> <span> | </span>
+        <a href="#">友情链接</a>
+    </div>
+    <p>CopyRight &copy; 2019 <a class="copy" href="http://www.hyycinfo.com" target="_blank">衡阳市源辰信息科技有限公司</a> All Rights Reserverd</p>
+    <p>电话：0734-8355998 湘ICP备16015987号-1</p>
+</footer>
+<script src="js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+
+</script>
+</body>
+</html>

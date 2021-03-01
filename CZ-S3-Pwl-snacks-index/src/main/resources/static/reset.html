@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="css/register.css">
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/axios/0.19.2/axios.min.js"></script>
+</head>
+
+<body>
+	<!-- 邮箱:<input v-model="email"><br>
+	新密码:<input v-model="pwd"><br>
+	确认密码:<input v-model="conpwd"><br>
+	验证码:<input v-model="vcode"> -->
+	 <div id="regst"  class="reg_form clearfix">
+            <form id="myform">
+                <ul>
+                   <li>
+                        <label for="email">邮箱:</label>
+                        <input v-model="email" type="text" id="email" name="email" placeholder="请输入有效的邮箱地址"/>
+                        <input type="button" id="getCode" @click="getVcode()"  :value="code"/>
+                        <span class="error_tip yzm_tip" >提示信息</span>
+                    </li>
+                    <li>
+                        <label for="pwd">密码:</label>
+                        <input v-model="pwd" type="password" id="pwd" name="pwd" placeholder="请输入6~15位字母、数字还可包含特殊字符">
+                        <span class="error_tip">提示信息</span>
+                    </li>
+                    <li>
+                        <label for="cpwd">确认密码:</label>
+                        <input v-model="conpwd" type="password" id="cpwd" name="cpwd" placeholder="请输入确认密码">
+                        <span class="error_tip">提示信息</span>
+                    </li>                  
+                    <li>
+                        <label for="yzm">验证码:</label>
+                        <input v-model="vcode" type="text" id="yzm" name="realName" placeholder="请输入6位数验证码">
+                        <span class="error_tip">提示信息</span>
+                    </li>   
+                    <li>
+                        <input type="button" id="reg" name="" @click="reset" value="确认">
+                        <span id="errmsg">提示信息3</span>
+                    </li>              
+                </ul>
+            </form>
+        </div>
+	<!-- <input id="changeVcode" @click="getVcode" type="button" :value="code"><br>
+	<input @click="reset" type="button" value="确定"> -->
+<script type="text/javascript">
+	var v = new Vue({
+		el:"#regst",
+		data:{
+			email:"",
+			pwd:"",
+			conpwd:"",
+			vcode:"",
+			code:"发送验证码",
+			times:20,
+		},methods:{
+			getVcode(){
+				if(this.times==20){					
+					axios.get("sendVcode?email="+this.email).then(res=>{						
+						if(res.data.code==1){
+							v.changetime();
+							$("#popup_info").text(res.data.msg);
+							showMsg();
+						}else{
+							$("#popup_info").text(res.data.msg);
+							showMsg();
+						}
+					})
+				}
+			},reset(){
+				var params = new URLSearchParams();
+				params.append("pwd",this.pwd);
+				params.append("conpwd",this.conpwd);
+				params.append("email",this.email);
+				params.append("vcode",this.vcode);
+				axios.post("resetPwd",params).then(res=>{
+					if(res.data.code==1){
+						$("#popup_info").text(res.data.msg);
+						showMsg();
+						setTimeout(function(){
+							location.href = "login.html";
+						},1000)						
+					}else{
+						$("#popup_info").text(res.data.msg);
+						showMsg();
+					}
+				})
+			},changetime(){
+				this.code=this.times;
+				if(this.times == 0){
+					this.code = "重新发送"
+					this.times = 20;
+					return;
+				}else{
+					this.times--;
+				}
+				setTimeout(function(){
+					v.changetime();
+				},1000)
+			}
+		}
+	})
+	
+	
+	function showMsg(){
+		$('.popup_con').fadeIn('fast', function(){
+			setTimeout(function(){
+				$('.popup_con').fadeOut('fast',function(){
+					// location.href = 'alipay/pay/' + data.msg +"/" + price;
+				});	
+			}, 1000)
+		});
+	}
+</script>
+
+<script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+<script src="js/register.js"></script>
+<div class="popup_con">
+	<div class="popup">
+		<p id="popup_info"></p>
+	</div>
+</div>
+</body>
+</html>

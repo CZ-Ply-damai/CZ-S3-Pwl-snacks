@@ -1,0 +1,386 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>源辰-零食网</title>
+<meta name="keywords" content="小吃,美食,零食,源辰" />
+<meta name="description" content="各种小吃美食，应有尽有" />
+<link href="images/yc.png" rel="shortcut icon" type="image/x-icon" />
+<link href="css/header.css" rel="stylesheet" type="text/css" />
+<link href="css/common.css" rel="stylesheet" type="text/css"/>
+<link href="images/yc.png" rel="shortcut icon" type="image/x-icon" />
+<link href="css/pay.css" rel="stylesheet" type="text/css" />
+<link href="css/order.css" rel="stylesheet" type="text/css" />
+<link href="css/footer.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/ajax.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/axios/0.19.2/axios.min.js"></script>
+<script type="text/javascript"
+	src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+</head>
+<script type="text/javascript">
+	function queryGood(){
+		axios.get("goods?tno="+vgood.tno+
+				"&pageIndex="+vgood.pageIndex+"&gname="+vtype.gname
+				+"&num1="+vgood.num1+"&num2="+vgood.num2)
+				.then(res=>{
+					if(res.data==""){
+						$("#popup_info").text("没有搜索到您要的结果..");
+						showMsg();
+						return;
+					}
+					vgood.list = res.data;
+		})
+	}
+	
+	
+	function queryPages(){
+		axios.get("countPage?tno="+vgood.tno+"&gname="+vtype.gname
+				+"&num1="+vgood.num1+"&num2="+vgood.num2).then(res=>{
+			vgood.count = res.data;
+			vgood.pages = parseInt(vgood.count/20);
+			if(vgood.count%20>0){
+				vgood.pages++;
+			}
+			queryGood();
+		})
+	}
+	
+	var LocString=String(window.document.location.href);
+	 function GetQueryString(str){
+	 var rs=new RegExp("(^|)"+str+"=([^&]*)(&|$)","gi").exec(LocString),tmp;
+	 if(tmp=rs){
+		 return tmp[2];
+	 }
+	 	return "";
+	 }
+</script>
+<body>
+<!-- 顶部区域 -->
+<header id="header">
+	<!-- 顶部标题区域 -->
+	<div class="htitle">
+    	<a href="#" target="_blank" class="location">衡阳</a>
+        
+        <div class="header-info">
+            <div v-if="showname" class="login-info">
+            	<a href="login.html" title="点击登录">您好，请登录</a>
+                <a href="register.html" title="点击注册"> 免费注册 </a>
+            </div>
+            <div v-if="!showname" class="login-info">
+            	<a href="#">{{list.nickName}}</a>
+            	<a href="#" @click="back">退出</a>
+            </div>
+            
+            <div class="person-info">
+            	<span>|</span>
+            	<a href="order.html" >我的订单</a>
+                <span>|</span>
+                <a href="#" target="_blank">我的小吃</a>
+                <span>|</span>
+                <a href="#" target="_blank">客户服务</a>
+                <span>|</span>
+           		<a href="#" target="_blank">个人信息</a>
+            </div>
+        
+        </div>
+    </div>
+    
+    <script type="text/javascript">
+    	var vname = new Vue({
+    		el:".htitle",
+    		data:{
+    			list:{},
+    			showname:true,
+    		},created(){
+    			axios.get("getName").then(res=>{  				
+    				if(res.data){
+						this.showname=false;
+						this.list=res.data;
+					}else{
+						this.showname=true;						
+					}
+    			})
+    		},methods:{
+    			back(){
+    				if(confirm("确认退出吗")){
+    					location.href = "login.html";
+    				}
+    			}
+    		}
+    	})
+    </script>
+
+    
+    <!-- 顶部搜索区域 -->
+    <div class="search">
+    	<!-- <div class="search_left">
+    		<a href="index.html" title="首页">
+            	<img src="images/logo.png" width="260px" height="120px"/> 
+            </a>
+        </div> -->
+        
+        <div class="search_right">
+        	<div class="search_top">
+                <div class="search_div">
+                    <input v-model="gname" type="search" class="search-ipt" placeholder="请输入要搜索的内容" />
+                    <input @click="search" type="button" class="search-btn"/>  
+                </div>
+                <div class="buycart">
+                	<i class="iconfont">{{nums}}</i>
+                    <a href="#"  @click="cart">我的购物车</a>
+                </div>
+            </div>
+            
+            <div class="search_item" id="search_item">
+            	<a href="index.html" :class="active == -1 ? 'selected' : ''" >全部</a>
+            	<a v-for="(s,index) in list" :value="index" :class = "active == index ? 'addclass' : ''" 
+            	:name="s.tno" :href="'index.html?' + Math.random() + '#' + s.tno" @click="changeStype(event,index)">{{s.tname}}</a>
+            </div>
+        </div>
+    </div>
+    
+    <script type="text/javascript">
+    	var vtype = new Vue({
+    		el:".search",
+    		data:{
+    			list:{},
+    			carts:{},
+    			gname:"",
+    			active:-1,
+    			nums:0,
+    		},created(){
+    			axios.get("stype").then(res=>{
+    				this.list = res.data;
+    				if(vname.showname==false){
+        				axios.get("cart").then(res=>{
+        					if(res.data!=null){
+	        					this.carts = res.data;
+	        					this.nums = this.carts.length;
+        					}
+        				});
+        			}
+    			});  			
+    		},methods:{
+    			search(){
+    				this.active = -1;
+    				vgood.pageIndex = 1;
+    				vgood.tno = "";
+    				vgood.gname = this.gname;
+    				queryPages();
+    			},changeStype(e,index){
+    				vgood.tno = e.target.name;
+    				this.active = index;
+    				$(".selected").removeClass(".selected");
+    				vgood.pageIndex = 1;  				
+    				this.gname = "";
+    				axios.get("StypeGood?tno="+vgood.tno+"&pageIndex="+vgood.pageIndex)
+					.then(res=>{
+    					queryPages();
+    				})
+    			},cart(){
+    				if(vname.showname==true){
+    					alert("请先登录");
+    					location.href = "login.html";
+    				}else{
+    					location.href = "cart.html";
+    				}
+    			}
+    		}
+    	})
+    </script>
+</header>
+
+
+
+<div style="font-size:16px" id="goods"  class="container cart" >
+<div  class="span24">
+   <table >
+					<tbody>
+					<tr>
+						<th >收货人</th>
+						<th>地址</th>
+						<th>电话</th>
+						<th>操作</th>
+						<th></th>
+					</tr>
+					
+						<tr  v-for="a in addrItems">
+							<td width="100">
+								{{a.name}}
+							</td>
+							<td width="200">
+								{{a.province}}{{a.city}}{{a.area}}{{a.addr}}
+							</td>
+							<td width="100">
+								{{a.tel}}
+							</td>
+							<td class="quantity" width="60">
+									<button type="button" name="deladdr">删除</button>						
+							</td>
+							<td width="140">
+								<lable v-if="a.flag!=0">默认地址</lable>
+								<button v-else type="button" @click="def(a.id)" name="deladdr">设为默认地址</button>
+							</td>
+						</tr>
+					
+				</tbody>
+			</table><br><br>
+			<form id="myform">
+        <ul>
+            <li>
+                <label for="addr_name" >收货人：</label>
+                <input id="addr_name"  v-model="a.name" name="name" type="text" placeholder="请输入收货人姓名..." />
+            </li><br>
+            <li>
+                <label for="addr_tel" >联系方式：</label>
+                <input id="addr_tel" v-model="a.tel" name="tel" type="text" placeholder="请输入收货人联系方式..." />
+            </li><br>
+            <li>
+                <label >收货地址：</label>
+                <select   id="province" name="province">
+                	<option value="0">--请选择省份--</option>
+                </select>
+                <select  id="city" name="city">
+                    <option value="0">--请选择城市--</option>
+                </select>
+                <select  id="area" name="area">
+                    <option value="0">--请选择地区--</option>
+                </select>
+            </li><br>
+            <li>
+                <label  for="addr_addr">详细地址：</label>
+                <input id="addr_addr" v-model="a.addr" name="addr" style='width: 480px;' type="text" placeholder="请输入详细地址（街道、门牌等）" />
+            </li><br>
+            <li class="addr_btn">
+               <button @click="addAddr" type="button">添加</button>
+            </li><br>
+        </ul>
+    </form>
+			
+    </div>
+    
+
+</div>
+
+<script type="text/javascript">
+    var vgood = new Vue({
+    	el:"#goods",
+    	data:{
+    		addrItems:{},
+    		a:{
+				name:"",
+				tel:"",
+				addr:"",
+				province:"",
+				area:"",
+				city:"",
+			},	
+    	
+    	},created(){
+    		axios.get("queryAddr").then(res=>{  				
+				this.addrItems=res.data;
+			})
+    	},methods:{
+    		def(id){
+				var user={
+						id:id,
+					};	
+				console.info(id);
+				$.post("deaddr.do",user,function(msg){
+					alert(msg);
+					location.href="address.html";
+				});
+			},addAddr(){
+				var she=document.getElementById("province");
+				var index1=she.selectedIndex;
+				//console.info(she);
+				var shi=document.getElementById("city");
+				var index2=shi.selectedIndex;
+				var xia=document.getElementById("area");
+				var index3=xia.selectedIndex;
+				this.a.province=she.options[index1].value;
+				this.a.city=shi.options[index2].value;
+				this.a.area=xia.options[index3].value;
+	    		var param = new URLSearchParams();
+	    		
+	    		param.append("name",this.a.name);
+	    		param.append("tel",this.a.tel);
+	    		param.append("addr",this.a.addr);
+	    		param.append("city",this.a.city);
+	    		param.append("province",this.a.province);
+	    		param.append("area",this.a.area);
+	    		axios.post("addresinfo",param).then(res=>{
+	    			if(res.data.code==1){
+	    				$("#popup_info").text(res.data.msg);
+	    				showMsg();
+	    				axios.get("queryAddr").then(res=>{
+	    					this.addrlist = res.data;			
+	    				})
+	    			}else{
+	    				$("#popup_info").text(res.data.msg);
+	    				showMsg();
+	    			}	    			
+	    		}) 		
+			},changeAddr(index){
+				this.active = index;
+			},changeFlag(index){
+				for(var i in this.addrlist){
+					if(this.addrlist[i].flag==1){
+						this.addrlist[i].flag = 0;
+						axios.get("changeFlag?ano="+this.addrlist[i].ano
+								+"&flag="+this.addrlist[i].flag)
+					}
+				}
+				this.addrlist[index].flag = 1;
+				axios.get("changeFlag?ano="+this.addrlist[index].ano
+						+"&flag="+this.addrlist[index].flag).then(res=>{
+							if(res.data.code==1){
+			    				$("#popup_info").text(res.data.msg);
+			    				showMsg();
+			    				setTimeout(function(){
+								},700)
+			    				axios.get("queryAddr").then(res=>{
+				    				this.addrlist = res.data;			
+				    			});	    				
+			    			}else{
+			    				$("#popup_info").text(res.data.msg);
+			    				showMsg();
+			    			}
+						})
+			}
+    	}
+    })
+ 
+</script>
+
+<div class="popup_con">
+	<div class="popup">
+		<p id="popup_info"></p>
+	</div>
+</div> 
+<footer>
+	<div class="foot_link">
+        <a href="#">关于我们</a> <span> | </span>
+        <a href="#">联系我们</a> <span> | </span>
+        <a href="#">招聘广告</a> <span> | </span>
+        <a href="#">友情链接</a>
+    </div>
+    <p>CopyRight &copy; 2019 <a class="copy" href="http://www.hyycinfo.com" target="_blank">衡阳市源辰信息科技有限公司</a> All Rights Reserverd</p>
+    <p>电话：0734-8355998 湘ICP备16015987号-1</p>
+</footer>
+<script src="js/jquery-3.4.1.min.js"></script>
+<script src="js/addr.js"></script>
+
+<script type="text/javascript">
+
+function showAddrDiv() {
+	$("#addr_div").css("display", "block");
+}
+
+function hiddenDiv() {
+	$("#addr_div").css("display", "none");
+}
+</script>
+</body>
+</html>
