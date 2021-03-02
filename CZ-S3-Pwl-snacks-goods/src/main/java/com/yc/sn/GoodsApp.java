@@ -1,4 +1,4 @@
-package com.yc.sq;
+package com.yc.sn;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -8,10 +8,10 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 @SpringBootApplication
 @EnableEurekaClient
 @MapperScan("com.yc.sq.dao")
-public class MusicApp {
+public class GoodsApp {
 	
 	public static void main(String[] args) {
-		SpringApplication.run(MusicApp.class, args);
+		SpringApplication.run(GoodsApp.class, args);
 	}
 
 }
