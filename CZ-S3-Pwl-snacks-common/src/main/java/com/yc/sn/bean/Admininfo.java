@@ -1,6 +1,9 @@
 package com.yc.sn.bean;
 
-public class Admininfo {
+public class Admininfo implements java.io.Serializable {
+
+
+	private static final long serialVersionUID = 1L;
     private Integer aid;
 
     private String aname;

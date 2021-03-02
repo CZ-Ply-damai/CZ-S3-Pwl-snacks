@@ -1,6 +1,9 @@
 package com.yc.sn.bean;
 
-public class Addrinfo {
+public class Addrinfo implements java.io.Serializable {
+
+
+	private static final long serialVersionUID = 1L;
     private Integer ano;
 
     private Integer mno;

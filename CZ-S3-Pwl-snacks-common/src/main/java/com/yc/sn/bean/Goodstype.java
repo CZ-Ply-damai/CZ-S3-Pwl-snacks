@@ -1,6 +1,9 @@
 package com.yc.sn.bean;
 
-public class Goodstype {
+public class Goodstype implements java.io.Serializable {
+
+
+	private static final long serialVersionUID = 1L;
     private Integer tno;
 
     private String tname;

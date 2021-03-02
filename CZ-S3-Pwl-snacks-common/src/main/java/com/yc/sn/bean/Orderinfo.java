@@ -3,7 +3,10 @@ package com.yc.sn.bean;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class Orderinfo {
+public class Orderinfo implements java.io.Serializable {
+
+
+	private static final long serialVersionUID = 1L;
     private Integer ono;
 
     private Date odate;

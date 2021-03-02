@@ -2,7 +2,10 @@ package com.yc.sn.bean;
 
 import java.math.BigDecimal;
 
-public class Goodsinfo {
+public class Goodsinfo implements java.io.Serializable {
+
+
+	private static final long serialVersionUID = 1L;
     private Integer gno;
 
     private String gname;

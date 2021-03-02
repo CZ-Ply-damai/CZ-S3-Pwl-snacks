@@ -2,17 +2,27 @@ package com.yc.sn.bean;
 
 import java.util.Date;
 
-public class Memberinfo {
+import javax.validation.constraints.NotEmpty;
+
+public class Memberinfo implements java.io.Serializable {
+
+
+	private static final long serialVersionUID = 1L;
+	
+	private Integer ifcheck;
+	
     private Integer mno;
 
     private String nickname;
 
     private String realname;
 
+    //@NotEmpty(message = "密码不能为空！")
     private String pwd;
 
     private String tel;
 
+    //@NotEmpty(message = "邮箱不能为空！")
     private String email;
 
     private String photo;
@@ -21,7 +31,17 @@ public class Memberinfo {
 
     private Integer status;
 
-    public Integer getMno() {
+    
+    
+    public Integer getIfcheck() {
+		return ifcheck;
+	}
+
+	public void setIfcheck(Integer ifcheck) {
+		this.ifcheck = ifcheck;
+	}
+
+	public Integer getMno() {
         return mno;
     }
 

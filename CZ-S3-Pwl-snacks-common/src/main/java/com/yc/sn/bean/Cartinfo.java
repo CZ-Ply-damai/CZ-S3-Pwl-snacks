@@ -1,6 +1,9 @@
 package com.yc.sn.bean;
 
-public class Cartinfo {
+public class Cartinfo implements java.io.Serializable {
+
+
+	private static final long serialVersionUID = 1L;
     private Integer cno;
 
     private Integer mno;

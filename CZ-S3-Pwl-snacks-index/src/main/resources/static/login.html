@@ -34,13 +34,13 @@
         
         <div class="item item-border">
         	<label for="account" class="login_label"></label>
-            <input v-model="account" type="text" class="ipt" name="account" id="account" placeholder="邮箱/用户名/已验证的手机"/>
+            <input v-model="m.nickname" type="text" class="ipt" name="account" id="account" placeholder="邮箱/用户名/已验证的手机"/>
             <span class="clear_btn" @click="logv.account=''"></span>
         </div>
         
         <div class="item item-border">
         	<label for="pwd" class="login_label pwd_label"></label>
-            <input v-model="pwd" type="password" maxlength="18" class="ipt" name="pwd" id="pwd" placeholder="密码"/>
+            <input v-model="m.pwd" type="password" maxlength="18" class="ipt" name="pwd" id="pwd" placeholder="密码"/>
             <span class="clear_btn" @click="logv.pwd=''"></span>
         </div>
         
@@ -68,25 +68,27 @@
 	var logv = new Vue({
 		el:".loginarea",
 		data:{
-			account:"",
-			pwd:"",
-			ifcheck:"",
+			m:{
+				nickname:"",
+				pwd:"",
+				ifcheck:""
+			},		
 		},created(){
 			axios.get("getCookie").then(res=>{
 				if(res.data){
-					this.account = res.data;
+					this.m.nickname = res.data;
 				}
 			})
 		},methods:{
 			log(){
 				if(auto.checked==true){
-					this.ifcheck = 1;
+					this.m.ifcheck = 1;
 				}else
-					this.ifcheck = -1;
+					this.m.ifcheck = -1;
 				var params = new URLSearchParams();
-				params.append("pwd",this.pwd);
-				params.append("account",this.account);
-				params.append("ifcheck",this.ifcheck);
+				params.append("pwd",this.m.pwd);
+				params.append("nickname",this.m.nickname);
+				params.append("ifcheck",this.m.ifcheck);
 				axios.post("login",params).then(res=>{
 					if(res.data.code==1){
 						 $("#popup_info").text("欢迎您!");
