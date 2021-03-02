@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @EnableEurekaClient
-@MapperScan("com.yc.sq.dao")
+@MapperScan("com.yc.sn.dao")
 @EnableTransactionManagement
 public class UserApp {
 	
