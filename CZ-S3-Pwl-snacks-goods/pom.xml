@@ -60,7 +60,7 @@
 
 		<dependency>
 			<groupId>com.yc</groupId>
-			<artifactId>C89-S3-Ply-sq-common</artifactId>
+			<artifactId>CZ-S3-Pwl-snacks-common</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
