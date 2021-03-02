@@ -1,5 +1,7 @@
 package com.yc.sn.web;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.yc.sn.bean.Goodstype;
 import com.yc.sn.bean.Memberinfo;
 import com.yc.sn.bean.Result;
 
@@ -19,6 +22,8 @@ public class IndexAction {
 
 	@Resource
 	private IUserAction iua;
+	
+	@Resource IStypeAction isa;
 	
 	@RequestMapping("login")
 	public Result login(Memberinfo m,HttpSession session,
@@ -55,5 +60,10 @@ public class IndexAction {
 			}
 		}
 		return null;
+	}
+	
+	@RequestMapping("stype")
+	public List<Goodstype> queryStype(){
+		return isa.queryStype();
 	}
 }
