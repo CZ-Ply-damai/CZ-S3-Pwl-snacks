@@ -23,7 +23,7 @@ public class RegisterAction {
 			return Result.failure("字段验证错误！", errors.getAllErrors());
 		}
 		try {
-			ubiz.register(mb);
+			ubiz.regist(mb);
 			return Result.success("注册成功！", null);
 		} catch (Exception e) {
 			errors.rejectValue("name", "NotOne", e.getMessage());

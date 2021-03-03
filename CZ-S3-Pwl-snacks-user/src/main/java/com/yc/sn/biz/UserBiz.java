@@ -46,7 +46,7 @@ public class UserBiz {
 	}
 	
 	@Transactional
-    public void register(Memberinfo mb) throws Exception {
+    public void regist(Memberinfo mb) throws Exception {
     	MemberinfoExample me=new MemberinfoExample();
     	me.createCriteria().andNicknameEqualTo(mb.getNickname());
     	List<Memberinfo> list=mm.selectByExample(me);
