@@ -15,4 +15,7 @@ public interface IUserAction {
 
 	@PostMapping("login")
 	Result login(Memberinfo m);
+	
+	@PostMapping("register")
+	Result register(Memberinfo m);
 }

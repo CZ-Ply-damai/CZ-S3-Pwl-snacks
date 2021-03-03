@@ -17,6 +17,7 @@ import com.yc.sn.bean.Result;
 
 
 
+
 @RestController
 public class IndexAction {
 
@@ -66,4 +67,10 @@ public class IndexAction {
 	public List<Goodstype> queryStype(){
 		return isa.queryStype();
 	}
+	
+	@RequestMapping("regist")
+   	public Result regist(Memberinfo sm) {
+    	Result ret=iua.register(sm);
+		return ret;
+   	}
 }
