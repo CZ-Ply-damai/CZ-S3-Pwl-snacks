@@ -1,4 +1,4 @@
-package com.yc.sq;
+package com.yc.sn;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
