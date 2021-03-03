@@ -1,3 +1,4 @@
+
 package com.yc.sn.web;
 
 import java.util.List;
@@ -79,4 +80,14 @@ public class IndexAction {
 	
 		return iga.queryGoods(good);
 	}
+
+	
+	
+	
+	@RequestMapping("regist")
+   	public Result regist(Memberinfo sm) {
+    	Result ret=iua.regist(sm);
+		return ret;
+   	}
 }
+

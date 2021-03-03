@@ -1,3 +1,4 @@
+
 package com.yc.sn.web;
 
 import java.util.HashMap;
@@ -56,3 +57,4 @@ public class GoodsAction {
 		return ret;
 	}
 }
+

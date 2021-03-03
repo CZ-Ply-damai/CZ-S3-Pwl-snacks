@@ -103,7 +103,7 @@
 							params.append("tel",this.minfo.tel);
 							params.append("vcode",this.vcode);
 							params.append("conpwd",this.conpwd);
-							axios.post("reg",params).then(res=>{								
+							axios.post("regist",params).then(res=>{								
 								if(res.data.code == 1){
 									$("#popup_info").text(res.data.msg);
 									showMsg();

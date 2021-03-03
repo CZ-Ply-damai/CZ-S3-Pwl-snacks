@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.yc.sn.bean.Memberinfo;
 import com.yc.sn.bean.MemberinfoExample;
@@ -42,5 +43,17 @@ public class UserBiz {
 		}
 		return list.get(0);
 		
+	}
+	
+	@Transactional
+    public void regist(Memberinfo mb) throws Exception {
+    	MemberinfoExample me=new MemberinfoExample();
+    	me.createCriteria().andNicknameEqualTo(mb.getNickname());
+    	List<Memberinfo> list=mm.selectByExample(me);
+    	if (list.isEmpty()) {
+		    mm.insertSelective(mb);
+		}else {
+			throw new BizException("该账号已被使用！");
+		}
 	}
 }
