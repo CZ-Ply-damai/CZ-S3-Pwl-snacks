@@ -29,8 +29,19 @@ public class Goodsinfo implements java.io.Serializable {
     private Integer status;
 
     private String descr;
+    
+    private Integer page;
+    
 
-    public Integer getGno() {
+    public Integer getPage() {
+		return page;
+	}
+
+	public void setPage(Integer page) {
+		this.page = page;
+	}
+
+	public Integer getGno() {
         return gno;
     }
 

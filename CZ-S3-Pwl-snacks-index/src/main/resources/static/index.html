@@ -17,9 +17,11 @@
 </head>
 <script type="text/javascript">
 	function queryGood(){
-		axios.get("goods?tno="+vgood.tno+
+		console.info(vgood.tno);
+		axios.get("querygoods?tno="+vgood.tno+
 				"&pageIndex="+vgood.pageIndex+"&gname="+vtype.gname
-				+"&num1="+vgood.num1+"&num2="+vgood.num2)
+				)
+				//+"&num1="+vgood.num1+"&num2="+vgood.num2
 				.then(res=>{
 					if(res.data==""){
 						$("#popup_info").text("没有搜索到您要的结果..");
@@ -282,7 +284,7 @@
     		var name= decodeURI(GetQueryString("gn"));
 			this.gname = name;
 			vtype.gname = name;
-    		axios.get("countPage?tno="+this.tno+"&gname="+vtype.gname
+    		/* axios.get("countPage?tno="+this.tno+"&gname="+vtype.gname
     				+"&num1="+this.num1+"&num2="+this.num2).then(res=>{
     			this.count = res.data;
     			this.pages = parseInt(this.count/20);
@@ -291,7 +293,25 @@
 				}
 				queryGood();
 				//this.pageIndex = 1;								
-    		})     		
+    		})  */  
+    		/* var params = new URLSearchParams();
+			params.append("pageIndex",this.pageIndex);
+    		axios.post("querygoods",params).then(res=>{
+    			this.list = res.data;
+    		}) */
+    		axios.get("querygoods?tno="+this.tno+
+    				"&pageIndex="+this.pageIndex+"&gname="+vtype.gname
+    				)
+    				//+"&num1="+vgood.num1+"&num2="+vgood.num2
+    				.then(res=>{
+    					if(res.data==""){
+    						$("#popup_info").text("没有搜索到您要的结果..");
+    						showMsg();
+    						return;
+    					}
+    					this.list = res.data.list;
+    					this.pages = res.data.pages;
+    		})
     	},methods:{
     		changePage(e){
     			this.pageIndex = e.target.innerText;
