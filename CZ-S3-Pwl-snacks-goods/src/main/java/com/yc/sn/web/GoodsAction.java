@@ -48,7 +48,7 @@ public class GoodsAction {
 		//example.createCriteria().andGnameLike(good.getGname()).andTnoEqualTo(good.getTno());
 		Page<Goodsinfo> p = PageHelper.startPage(good.getPage(), 20,count);		
 		example.setOrderByClause("gno asc");
-		
+		gim.selectByExample(example);
 		Map<String, Object> ret = new HashMap<>();
 		// 分页数据
 		ret.put("list", p);
