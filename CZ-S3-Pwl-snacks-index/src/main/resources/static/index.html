@@ -139,8 +139,9 @@ function queryGood(){
             
             <div class="search_item" id="search_item">
             	<a href="index.html" :class="active == -1 ? 'selected' : ''" >全部</a>
-            	<a v-for="(s,index) in list" :value="index" :class = "active == index ? 'addclass' : ''" 
-            	:name="s.tno" :href="'index.html?' + Math.random() + '#' + s.tno" @click="changeStype(event,index)">{{s.tname}}</a>
+            	<a v-for="(s,index) in list" :value="index" :class = "active == index ? 'selected' : ''" 
+            	:name="s.tno" href="#" @click="changeStype(event,index)">{{s.tname}}</a>
+            <!-- :href="'index.html?' + Math.random() + '#' + s.tno" -->
             </div>
         </div>
     </div>
@@ -159,7 +160,6 @@ function queryGood(){
     				this.list = res.data;
     				if(vname.showname==false){
         				axios.get("cart").then(res=>{
-        					console.info(res.data);
         					if(res.data!=null){
 	        					this.carts = res.data;
 	        					this.nums = this.carts.length;
@@ -176,14 +176,15 @@ function queryGood(){
     				queryGood();
     			},changeStype(e,index){
     				vgood.tno = e.target.name;
+
     				this.active = index;
-    				$(".selected").removeClass(".selected");
+    				//$(".selected").removeClass(".selected");
     				vgood.pageIndex = 1;  				
     				this.gname = "";
-    				axios.get("StypeGood?tno="+vgood.tno+"&pageIndex="+vgood.pageIndex)
-					.then(res=>{
-    					queryGood();
-    				})
+    				//axios.get("StypeGood?tno="+vgood.tno+"&pageIndex="+vgood.pageIndex)
+					//.then(res=>{
+    				queryGood();
+    				//})
     			},cart(){
     				if(vname.showname==true){
     					$("#popup_info").text("您还未登录...");
