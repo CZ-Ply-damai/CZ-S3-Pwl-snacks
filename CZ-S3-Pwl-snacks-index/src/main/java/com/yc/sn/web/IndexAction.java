@@ -67,6 +67,11 @@ public class IndexAction {
 		return null;
 	}
 	
+	@RequestMapping("getName")
+	public Result getLoginUser(HttpSession session) {
+		return Result.success("会话中的用户对象", session.getAttribute("loginedUser"));
+	}
+	
 	@RequestMapping("stype")
 	public List<Goodstype> queryStype(){
 		return iga.queryStype();
@@ -82,7 +87,6 @@ public class IndexAction {
 		good.setNum1(num1);
 		good.setNum2(num2);
 		
-		System.out.println(good.getNum1());
 		return iga.queryGoods(good);
 	}
 

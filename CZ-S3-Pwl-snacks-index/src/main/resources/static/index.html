@@ -17,11 +17,9 @@
 </head>
 <script type="text/javascript">
 function queryGood(){
-	//console.info(vgood.tno);
 	axios.get("querygoods?tno="+vgood.tno+
 			"&pageIndex="+vgood.pageIndex+"&gname="+vtype.gname
 			+"&num1="+vgood.num1+"&num2="+vgood.num2)
-
 			.then(res=>{
 				if(res.data==""){
 					$("#popup_info").text("没有搜索到您要的结果..");
@@ -32,19 +30,6 @@ function queryGood(){
 				vgood.pages = res.data.pages;
 	})
 }
-	
-	
-	/* function queryPages(){
-		axios.get("countPage?tno="+vgood.tno+"&gname="+vtype.gname
-				+"&num1="+vgood.num1+"&num2="+vgood.num2).then(res=>{
-			vgood.count = res.data;
-			vgood.pages = parseInt(vgood.count/20);
-			if(vgood.count%20>0){
-				vgood.pages++;
-			}
-			queryGood();
-		})
-	} */
 	
 	var LocString=String(window.document.location.href);
 	 function GetQueryString(str){
@@ -68,7 +53,7 @@ function queryGood(){
                 <a href="register.html" title="点击注册"> 免费注册 </a>
             </div>
             <div v-if="!showname" class="login-info">
-            	<a href="#">{{list.nickName}}</a>
+            	<a href="#">{{list.nickname}}</a>
             	<a href="#" @click="back">退出</a>
             </div>
             
@@ -93,10 +78,10 @@ function queryGood(){
     			list:{},
     			showname:true,
     		},created(){
-    			axios.get("getName").then(res=>{  				
-    				if(res.data){
+    			axios.get("getName").then(res=>{
+    				if(res.data.data){
 						this.showname=false;
-						this.list=res.data;
+						this.list=res.data.data.data;
 					}else{
 						this.showname=true;						
 					}
