@@ -19,6 +19,7 @@ import com.yc.sn.bean.Cartinfo;
 import com.yc.sn.bean.Goodsinfo;
 import com.yc.sn.bean.Goodstype;
 import com.yc.sn.bean.Memberinfo;
+import com.yc.sn.bean.Orderinfo;
 import com.yc.sn.bean.Result;
 
 
@@ -110,6 +111,11 @@ public class IndexAction {
 		map = (Map<String, Object>) session.getAttribute("loginedUser");
 		Integer mno = (Integer) map.get("mno");
 		return ica.queryCart(mno);
+	}
+	
+	@RequestMapping("addOrd")
+	public void addOrd(Orderinfo order) {
+		ica.addInfo(order);
 	}
 }
 
