@@ -186,7 +186,7 @@ function queryGood(){
     				vgood.pageIndex = 1;
     				vgood.tno = "";
     				vgood.gname = this.gname;
-    				queryPages();
+    				queryGood();
     			},changeStype(e,index){
     				vgood.tno = e.target.name;
     				this.active = index;
@@ -195,7 +195,7 @@ function queryGood(){
     				this.gname = "";
     				axios.get("StypeGood?tno="+vgood.tno+"&pageIndex="+vgood.pageIndex)
 					.then(res=>{
-    					queryPages();
+    					queryGood();
     				})
     			},cart(){
     				if(vname.showname==true){

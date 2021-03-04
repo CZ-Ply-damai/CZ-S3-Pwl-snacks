@@ -39,6 +39,7 @@ public class GoodsAction {
 	public Map<String, Object> queryGoods(@RequestBody Goodsinfo good){
 		boolean count = true;
 		GoodsinfoExample example = new GoodsinfoExample();
+		System.out.println(good.getGname());
 		if (good.getGname()!="") {
 			example.createCriteria().andGnameLike(good.getGname());
 		}
