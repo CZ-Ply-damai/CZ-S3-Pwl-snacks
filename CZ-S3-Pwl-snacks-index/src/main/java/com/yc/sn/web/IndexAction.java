@@ -2,6 +2,7 @@
 package com.yc.sn.web;
 
 import java.math.BigDecimal;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.yc.sn.bean.Cartinfo;
 import com.yc.sn.bean.Goodsinfo;
 import com.yc.sn.bean.Goodstype;
 import com.yc.sn.bean.Memberinfo;
@@ -30,12 +32,15 @@ public class IndexAction {
 	@Resource 
 	private IGoodsAction iga;
 	
+	@Resource
+	private ICartAction ica;
+	
 	@RequestMapping("login")
 	public Result login(Memberinfo m,HttpSession session,
 			HttpServletResponse response,HttpServletRequest request) {
 		Result ret = iua.login(m);
 		if (ret.getCode() == 1) {
-			session.setAttribute("loginedUser", ret);
+			session.setAttribute("loginedUser", ret.getData());
 		}
 		if (m.getIfcheck()==1) {
 			Cookie cookie = new Cookie("nickName", m.getNickname());
@@ -90,13 +95,21 @@ public class IndexAction {
 		return iga.queryGoods(good);
 	}
 
-	
-	
-	
+		
 	@RequestMapping("regist")
    	public Result regist(Memberinfo sm) {
     	Result ret=iua.regist(sm);
 		return ret;
    	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping("cart")
+	public List<Cartinfo> queryCart(HttpSession session){
+		System.out.println(session.getAttribute("loginedUser"));
+		Map<String, Object> map = new LinkedHashMap<>();
+		map = (Map<String, Object>) session.getAttribute("loginedUser");
+		Integer mno = (Integer) map.get("mno");
+		return ica.queryCart(mno);
+	}
 }
 

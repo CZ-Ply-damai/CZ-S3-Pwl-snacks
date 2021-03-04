@@ -81,7 +81,7 @@ function queryGood(){
     			axios.get("getName").then(res=>{
     				if(res.data.data){
 						this.showname=false;
-						this.list=res.data.data.data;
+						this.list=res.data.data;
 					}else{
 						this.showname=true;						
 					}
@@ -159,6 +159,7 @@ function queryGood(){
     				this.list = res.data;
     				if(vname.showname==false){
         				axios.get("cart").then(res=>{
+        					console.info(res.data);
         					if(res.data!=null){
 	        					this.carts = res.data;
 	        					this.nums = this.carts.length;
