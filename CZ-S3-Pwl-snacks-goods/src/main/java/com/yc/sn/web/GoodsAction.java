@@ -39,12 +39,30 @@ public class GoodsAction {
 	public Map<String, Object> queryGoods(@RequestBody Goodsinfo good){
 		boolean count = true;
 		GoodsinfoExample example = new GoodsinfoExample();
-		System.out.println(good.getGname());
+
 		if (good.getGname()!="") {
-			example.createCriteria().andGnameLike(good.getGname());
+			if (good.getNum1()!=null && good.getNum2()!=null) {
+				example.createCriteria().andGnameLike("%"+good.getGname()+"%")
+				.andPriceBetween(good.getNum1(), good.getNum2());
+			}else if (good.getNum1()!=null) {
+				System.out.println(good.getNum1());
+				example.createCriteria().andGnameLike("%"+good.getGname()+"%")
+				.andPriceGreaterThanOrEqualTo(good.getNum1());
+			}else if (good.getNum2()!=null) {
+				example.createCriteria().andGnameLike("%"+good.getGname()+"%")
+				.andPriceGreaterThanOrEqualTo(good.getNum2());
+			}
+			example.createCriteria().andGnameLike("%"+good.getGname()+"%");
 		}
 		if (good.getTno()!=null) {
 			example.createCriteria().andTnoEqualTo(good.getTno());
+		}
+		if (good.getNum1()!=null && good.getNum2()!=null) {
+			example.createCriteria().andPriceBetween(good.getNum1(), good.getNum2());
+		}else if (good.getNum1()!=null) {
+			example.createCriteria().andPriceGreaterThanOrEqualTo(good.getNum1());
+		}else if (good.getNum2()!=null) {
+			example.createCriteria().andPriceGreaterThanOrEqualTo(good.getNum2());
 		}
 		//example.createCriteria().andGnameLike(good.getGname()).andTnoEqualTo(good.getTno());
 		Page<Goodsinfo> p = PageHelper.startPage(good.getPage(), 20,count);		

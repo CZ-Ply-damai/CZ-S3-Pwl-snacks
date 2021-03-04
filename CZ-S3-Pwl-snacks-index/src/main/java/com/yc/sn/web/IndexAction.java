@@ -1,6 +1,7 @@
 
 package com.yc.sn.web;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -72,12 +73,16 @@ public class IndexAction {
 	}
 	
 	@RequestMapping("querygoods")
-	public Map<String, Object> queryGoods(Integer pageIndex,String gname,Integer tno){
+	public Map<String, Object> queryGoods(Integer pageIndex,String gname,Integer tno,BigDecimal num1,
+			BigDecimal num2){
 		Goodsinfo good = new Goodsinfo();
 		good.setPage(pageIndex);
 		good.setGname(gname);
-		good.setTno(tno);
-	
+		good.setTno(tno);	
+		good.setNum1(num1);
+		good.setNum2(num2);
+		
+		System.out.println(good.getNum1());
 		return iga.queryGoods(good);
 	}
 

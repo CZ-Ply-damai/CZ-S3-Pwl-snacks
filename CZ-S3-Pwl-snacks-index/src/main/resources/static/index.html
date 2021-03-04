@@ -20,8 +20,8 @@ function queryGood(){
 	//console.info(vgood.tno);
 	axios.get("querygoods?tno="+vgood.tno+
 			"&pageIndex="+vgood.pageIndex+"&gname="+vtype.gname
-			)
-			//+"&num1="+vgood.num1+"&num2="+vgood.num2
+			+"&num1="+vgood.num1+"&num2="+vgood.num2)
+
 			.then(res=>{
 				if(res.data==""){
 					$("#popup_info").text("没有搜索到您要的结果..");
@@ -29,11 +29,12 @@ function queryGood(){
 					return;
 				}
 				vgood.list = res.data.list;
+				vgood.pages = res.data.pages;
 	})
 }
 	
 	
-	function queryPages(){
+	/* function queryPages(){
 		axios.get("countPage?tno="+vgood.tno+"&gname="+vtype.gname
 				+"&num1="+vgood.num1+"&num2="+vgood.num2).then(res=>{
 			vgood.count = res.data;
@@ -43,7 +44,7 @@ function queryGood(){
 			}
 			queryGood();
 		})
-	}
+	} */
 	
 	var LocString=String(window.document.location.href);
 	 function GetQueryString(str){
@@ -287,8 +288,7 @@ function queryGood(){
     		
 			axios.get("querygoods?tno="+this.tno+
 					"&pageIndex="+this.pageIndex+"&gname="+this.gname
-					)
-					//+"&num1="+vgood.num1+"&num2="+vgood.num2
+					+"&num1="+this.num1+"&num2="+this.num2)
 					.then(res=>{
 						if(res.data==""){
 							$("#popup_info").text("没有搜索到您要的结果..");
@@ -311,7 +311,7 @@ function queryGood(){
     			}
         		queryGood();
     		},queryPrice(){
-    			queryPages();
+    			queryGood();
     		},addCart(index){
     			axios.get("addCart?gno="+this.list[index].gno+"&nums=1").then(res=>{
 					if(res.data.code==1){
