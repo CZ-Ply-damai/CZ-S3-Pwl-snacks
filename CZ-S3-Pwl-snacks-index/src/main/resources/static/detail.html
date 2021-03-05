@@ -237,7 +237,7 @@
 			sum:1,
 		},
 		created(){
-			axios.get("good.s?op=queryGoodByGno&gno="+location.hash.substring(1)).then(res=>{
+			axios.get("good.s?gno="+location.hash.substring(1)).then(res=>{
 				this.good = res.data;
 			})
 		},

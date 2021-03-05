@@ -81,13 +81,15 @@ public class IndexAction {
 		return iga.queryGoods(good);
 	}
 
-	
-	
-	
 	@RequestMapping("regist")
    	public Result regist(Memberinfo sm) {
     	Result ret=iua.regist(sm);
 		return ret;
    	}
+	
+	@RequestMapping("querygoods")
+	public Goodsinfo queryGoodsById(Integer gno){
+		return iga.queryGoodsById(gno);
+	}
 }
 
