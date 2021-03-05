@@ -4,6 +4,8 @@ package com.yc.sn.web;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -23,5 +25,9 @@ public interface IUserAction {
 	List<Goodstype> queryStype();
 	
 	@PostMapping("regist")
-	Result regist(Memberinfo m);
+	Result regist(Memberinfo sm);
+	
+	@PostMapping("sendvcode2")
+	String sendvcode2(String email);
+
 }

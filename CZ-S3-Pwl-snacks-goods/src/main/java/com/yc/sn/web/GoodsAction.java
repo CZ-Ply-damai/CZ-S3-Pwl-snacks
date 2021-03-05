@@ -75,5 +75,13 @@ public class GoodsAction {
 		ret.put("pages", p.getPages());
 		return ret;
 	}
+	
+	@PostMapping("goodsinfo")
+	public Goodsinfo queryGoodsById(int gno){
+		GoodsinfoExample example = new GoodsinfoExample();
+		example.createCriteria().andGnoEqualTo(gno);
+		
+		return gim.selectByExample(example).get(0);
+	}
 }
 

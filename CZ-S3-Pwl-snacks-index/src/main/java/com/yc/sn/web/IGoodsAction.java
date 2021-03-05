@@ -17,4 +17,7 @@ public interface IGoodsAction {
 	
 	@PostMapping("stype")
 	List<Goodstype> queryStype();
+	
+	@PostMapping("goodsinfo")
+	Goodsinfo queryGoodsById(int gno);
 }

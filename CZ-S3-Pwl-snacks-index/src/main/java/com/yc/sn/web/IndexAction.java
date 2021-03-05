@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
+import com.yc.sn.bean.BizException;
 import com.yc.sn.bean.Cartinfo;
 import com.yc.sn.bean.Goodsinfo;
 import com.yc.sn.bean.Goodstype;
 import com.yc.sn.bean.Memberinfo;
 import com.yc.sn.bean.Orderinfo;
 import com.yc.sn.bean.Result;
+import com.yc.sn.bean.Utils;
 
 
 
@@ -97,13 +99,26 @@ public class IndexAction {
 		return iga.queryGoods(good);
 	}
 
-		
+
 	@RequestMapping("regist")
-   	public Result regist(Memberinfo sm) {
-    	Result ret=iua.regist(sm);
+   	public Result regist(Memberinfo sm,String vcode,String conpwd,HttpSession session) throws BizException {
+		Result ret;
+		Utils.checkNull(conpwd, "确认密码不能为空");
+		Utils.checkNull(vcode, "验证码不能为空");
+		if (vcode.equals(session.getAttribute(vcode))) {
+			ret=iua.regist(sm);
+		}else {
+			throw new BizException("验证码错误");
+		}    	
 		return ret;
    	}
 	
+
+	@RequestMapping("good.s")
+	public Goodsinfo queryGoodsById(Integer gno){
+		return iga.queryGoodsById(gno);
+	}
+
 	@SuppressWarnings("unchecked")
 	@RequestMapping("cart")
 	public List<Cartinfo> queryCart(HttpSession session){
@@ -129,6 +144,13 @@ public class IndexAction {
 	@RequestMapping("addOrd")
 	public void addOrd(Orderinfo order) {
 		ica.addInfo(order);
+
+	}
+	
+	@RequestMapping("sendvcode2")
+	public void sendvcode2(String email,HttpSession session) {
+		String vcode=iua.sendvcode2(email);
+		session.setAttribute("vcode", vcode);
 	}
 }
 

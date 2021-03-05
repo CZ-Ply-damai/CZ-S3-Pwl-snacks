@@ -1,6 +1,9 @@
 package com.yc.sn.biz;
 
+import java.sql.SQLException;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 
@@ -9,7 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.yc.sn.bean.Memberinfo;
 import com.yc.sn.bean.MemberinfoExample;
+import com.yc.sn.bean.Utils;
 import com.yc.sn.dao.MemberinfoMapper;
+
 import com.yc.sn.bean.BizException;
 
 @Service
@@ -17,6 +22,9 @@ public class UserBiz {
 
 	@Resource
 	private MemberinfoMapper mm;
+	
+	@Resource
+	private MailBiz mbiz;
 	
 	public Memberinfo login(Memberinfo m) throws BizException {
 		if (m.getNickname()=="") {
@@ -45,15 +53,71 @@ public class UserBiz {
 		
 	}
 	
-	@Transactional
-    public void regist(Memberinfo mb) throws Exception {
-    	MemberinfoExample me=new MemberinfoExample();
-    	me.createCriteria().andNicknameEqualTo(mb.getNickname());
-    	List<Memberinfo> list=mm.selectByExample(me);
-    	if (list.isEmpty()) {
-		    mm.insertSelective(mb);
-		}else {
-			throw new BizException("该账号已被使用！");
-		}
+	public void reg(Memberinfo minfo) 
+			throws BizException, SQLException {
+		// 字段验证
+		Utils.checkNull(minfo.getNickname(), "用户名不能为空");
+		Utils.checkNull(minfo.getPwd(), "密码不能为空");
+
+		Utils.checkNull(minfo.getEmail(), "邮箱不能为空");
+		Utils.checkNull(minfo.getTel(), "电话号码不能为空");
+		
+//		// 同名验证
+//		Memberinfo minfo2= udao.selectByemtel(minfo.getEmail(),minfo.getTel());
+//		if(minfo2 != null ) {
+//			throw new BizException("该邮箱或手机号已经被注册");
+//		}
+		
+		jianchaName(minfo.getNickname());
+		jianchaTel(minfo.getTel());
+		
+
+		mm.insert(minfo);
+
 	}
+	
+	//注册时发送验证码
+		
+		
+		//检查用户名是否有重复值
+		public void jianchaName(String name) throws BizException {
+			Memberinfo m =getName(name);
+			if (m!=null) {
+				throw new BizException("该用户名已被使用,请重新输入");
+			}
+		}
+		
+		
+		//检查电话是否有重复值
+			public void jianchaTel(String name) throws BizException {
+				Memberinfo m = getName(name);
+				if (m!=null) {
+					throw new BizException("该电话已被使用,请重新输入");
+				}
+			}
+			
+			public Memberinfo selectByEmail(String email) {
+				String sql = "select * from memberinfo where email = ?";
+				MemberinfoExample example=new MemberinfoExample();
+				example.createCriteria().andEmailEqualTo(email);
+				List<Memberinfo> list=mm.selectByExample(example);
+				if (list.isEmpty()) {
+					return null;
+				}else {
+					return list.get(0);
+				}
+			}
+			
+			public Memberinfo getName(String name){
+				String sql = "select * from memberinfo where nickName = ? or tel = ? or email = ?";
+				MemberinfoExample example =new MemberinfoExample();
+				example.createCriteria().andNicknameEqualTo(name);
+				List<Memberinfo> list=mm.selectByExample(example);
+				if (list.isEmpty()) {
+					return null;
+				}else {
+					return list.get(0);
+				}
+				   
+			}
 }
