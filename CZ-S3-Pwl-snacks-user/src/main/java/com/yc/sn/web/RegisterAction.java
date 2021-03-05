@@ -1,36 +1,50 @@
 package com.yc.sn.web;
 
+import java.sql.SQLException;
+import java.util.List;
+
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.yc.sn.bean.BizException;
+import com.yc.sn.bean.Goodstype;
+import com.yc.sn.bean.GoodstypeExample;
 import com.yc.sn.bean.Memberinfo;
+import com.yc.sn.bean.MemberinfoExample;
 import com.yc.sn.bean.Result;
 import com.yc.sn.biz.UserBiz;
+import com.yc.sn.dao.MemberinfoMapper;
+
 
 public class RegisterAction {
 	
 	@Resource
 	private UserBiz ubiz;
 	
-	@RequestMapping("regist")
-	public Result regist(@RequestBody Memberinfo mb, Errors errors) {
+	@Resource
+	private MemberinfoMapper mm;
+	
+	@PostMapping("regist")
+	public Result regist(Memberinfo minfo,String vcode,String conpwd,HttpSession session) throws SQLException {
 		
-		if (errors.hasFieldErrors("phone") || errors.hasFieldErrors("name") 
-				|| errors.hasFieldErrors("pwd")) {
-			return Result.failure("字段验证错误！", errors.getAllErrors());
-		}
 		try {
-			ubiz.regist(mb);
-			return Result.success("注册成功！", null);
-		} catch (Exception e) {
-			errors.rejectValue("name", "NotOne", e.getMessage());
-			return Result.failure("字段验证错误", errors.getAllErrors());
-		}
+
+			ubiz.reg(minfo,conpwd,vcode,(String) session.getAttribute("vcode"));
+			return Result.success("注册成功",null);
+		} catch (BizException e) {
+			e.printStackTrace();
+			return new Result(0,null,e.getMessage());
+		} 
 
 	}
+	
+	
+	
 
 
 }

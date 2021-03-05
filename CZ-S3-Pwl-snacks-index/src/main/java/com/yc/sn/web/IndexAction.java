@@ -98,8 +98,8 @@ public class IndexAction {
 
 
 	@RequestMapping("regist")
-   	public Result regist(Memberinfo sm) {
-    	Result ret=iua.regist(sm);
+   	public Result regist(Memberinfo sm,String vcode,String conpwd,HttpSession session) {
+    	Result ret=iua.regist(sm,vcode,conpwd,session);
 		return ret;
    	}
 	
