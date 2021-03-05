@@ -1,4 +1,4 @@
-package com.yc.sn.biz;
+package com.yc.sn.bean;
 
 import com.yc.sn.bean.BizException;
 

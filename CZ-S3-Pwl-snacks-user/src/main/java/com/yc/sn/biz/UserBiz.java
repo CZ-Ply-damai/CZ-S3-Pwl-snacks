@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.yc.sn.bean.Memberinfo;
 import com.yc.sn.bean.MemberinfoExample;
+import com.yc.sn.bean.Utils;
 import com.yc.sn.dao.MemberinfoMapper;
 
 import com.yc.sn.bean.BizException;
@@ -52,15 +53,15 @@ public class UserBiz {
 		
 	}
 	
-	public void reg(Memberinfo minfo,String conpwd,String vcode,String sessionVcode) 
+	public void reg(Memberinfo minfo) 
 			throws BizException, SQLException {
 		// 字段验证
 		Utils.checkNull(minfo.getNickname(), "用户名不能为空");
 		Utils.checkNull(minfo.getPwd(), "密码不能为空");
-		Utils.checkNull(conpwd, "确认密码不能为空");
+
 		Utils.checkNull(minfo.getEmail(), "邮箱不能为空");
 		Utils.checkNull(minfo.getTel(), "电话号码不能为空");
-		Utils.checkNull(vcode, "验证码不能为空");
+		
 //		// 同名验证
 //		Memberinfo minfo2= udao.selectByemtel(minfo.getEmail(),minfo.getTel());
 //		if(minfo2 != null ) {
@@ -70,39 +71,13 @@ public class UserBiz {
 		jianchaName(minfo.getNickname());
 		jianchaTel(minfo.getTel());
 		
-		if (vcode.equals(sessionVcode)) {
-			mm.insert(minfo);
-		}else {
-			throw new BizException("验证码错误");
-		}
+
+		mm.insert(minfo);
+
 	}
 	
 	//注册时发送验证码
-		public String sendVcode(String email) throws BizException {
-			//生产随机验证码
-			System.out.println(email);
-			String vcode = "" + System.currentTimeMillis();
-			vcode = vcode.substring(vcode.length()-6);
-			String reg = "^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*\\.[a-zA-Z0-9]{2,6}$";
-			Pattern p = Pattern.compile(reg);
-			Matcher m = p.matcher(email);
-			if (email.equals("")) {
-				throw new BizException("邮箱不能为空");	
-			}else {
-				if(!m.matches()){
-					throw new BizException("邮箱格式不正确");
-				}			
-				//根据用户获取用户信息
-				Memberinfo m1 = selectByEmail(email);
-				if (m1!=null) {
-					throw new BizException("该邮箱已绑定账户");
-				}
-				//发送邮件
-				mbiz.sendSimpleMail(email, 
-						"注册验证:", "请使用"+vcode+"验证码来验证");
-				return vcode;
-			}
-		}
+		
 		
 		//检查用户名是否有重复值
 		public void jianchaName(String name) throws BizException {

@@ -25,6 +25,9 @@ public interface IUserAction {
 	List<Goodstype> queryStype();
 	
 	@PostMapping("regist")
-	Result regist(Memberinfo sm,String vcode,String conpwd,HttpSession session);
+	Result regist(Memberinfo sm);
+	
+	@PostMapping("sendvcode2")
+	String sendvcode2(String email);
 
 }
