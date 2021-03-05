@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.yc.sn.bean.Cartinfo;
 import com.yc.sn.bean.Goodsinfo;
@@ -111,6 +112,18 @@ public class IndexAction {
 		map = (Map<String, Object>) session.getAttribute("loginedUser");
 		Integer mno = (Integer) map.get("mno");
 		return ica.queryCart(mno);
+	}
+	
+	@RequestMapping("addCart")
+	public Result addCart(Integer gno,Integer nums,@SessionAttribute Memberinfo loginedUser) {
+		System.out.println("11111");
+		System.out.println(loginedUser);
+		Cartinfo cart = new Cartinfo();
+		cart.setGno(gno);
+		cart.setMno(loginedUser.getMno());
+		cart.setNum(nums);
+		System.out.println(cart.getMno()+"==="+cart.getGno());
+		return ica.addC(cart);
 	}
 	
 	@RequestMapping("addOrd")
