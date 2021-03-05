@@ -11,8 +11,18 @@ public class Cartinfo implements java.io.Serializable {
     private Integer gno;
 
     private Integer num;
+    
+    private Goodsinfo good;
 
-    public Integer getCno() {
+    public Goodsinfo getGood() {
+		return good;
+	}
+
+	public void setGood(Goodsinfo good) {
+		this.good = good;
+	}
+
+	public Integer getCno() {
         return cno;
     }
 

@@ -29,7 +29,7 @@
                 <a href="register.html" title="点击注册"> 免费注册 </a>
             </div>
             <div v-if="!showname" class="login-info">
-            	<a href="#">{{list.nickName}}</a>
+            	<a href="#">{{list.nickname}}</a>
             	<a href="#" @click="back">退出</a>
             </div>
             <div class="person-info">
@@ -53,9 +53,9 @@
     			showname:true,
     		},created(){
     			axios.get("getName").then(res=>{					
-    				if(res.data){
+    				if(res.data.data){
 						this.showname=false;
-						this.list=res.data;
+						this.list=res.data.data;
 					}else{
 						this.showname=true;
 						alert("请先登录");
@@ -139,10 +139,10 @@
     	<div class="cart_list_td clearfix" id="cart_list">
        		<ul v-for="(c,index) in list">
         		<li class="col01"><input name="one" type="checkbox" checked @click="selectOne(index)"></li>
-            	<li class="col02"><img :src="c.pics"></li>
-                <li class="col03">{{c.gname}}<br><em>{{c.price}}元/{{c.weight}}</em></li>
-                <li class="col04">{{c.weight}}</li>
-                <li class="col05">{{c.price}}</li>
+            	<li class="col02"><img :src="c.good.pics"></li>
+                <li class="col03">{{c.good.gname}}<br><em>{{c.good.price}}元/{{c.good.weight}}</em></li>
+                <li class="col04">{{c.good.weight}}</li>
+                <li class="col05">{{c.good.price}}</li>
                 <li class="col06">
                 	<div class="num_add">
                     	<a href="javascript:void(0)" @click="sub(index)" class="minus fl">-</a>
@@ -150,7 +150,7 @@
                         <a href="javascript:void(0)" @click="add(index)" class="add fl">+</a>
                     </div>
                 </li>
-                <li class="col07">{{c.price*c.num}}</li>
+                <li class="col07">{{c.good.price*c.num}}</li>
                 <li class="col08"><a href="javascript:;" @click="del(index)">删除</a></li>
             </ul>
             
@@ -174,14 +174,13 @@
 					list:{},
 					nums:0,
 					price:0,
-					href:"addInfo?a=1",
 					length:0,
 				},created(){
 					axios.get("cart").then(res=>{
 						this.list = res.data;
 						for(var i in this.list) {
 							this.nums += this.list[i].num;
-							this.price += this.list[i].num*this.list[i].price;
+							this.price += this.list[i].num*this.list[i].good.price;
 						}
 					})
 				},methods:{
@@ -190,7 +189,7 @@
 						if(cbxs[index].checked==false){
 							cbxs[index].checked=true;
 							this.nums += this.list[index].num;
-							this.price += this.list[index].num*this.list[index].price;
+							this.price += this.list[index].num*this.list[index].good.price;
 						}
 						
 						if(this.list[index].num<2){
@@ -204,7 +203,7 @@
 						}
 						this.list[index].num--;
 						this.nums--;
-						this.price -= this.list[index].price;
+						this.price -= this.list[index].good.price;
 						for(var i = 0; i < cbxs.length; i++){
 							if(cbxs[i].checked==false){
 								return;
@@ -216,11 +215,11 @@
 						if(cbxs[index].checked==false){
 							cbxs[index].checked=true;
 							this.nums += this.list[index].num;
-							this.price += this.list[index].num*this.list[index].price;
+							this.price += this.list[index].num*this.list[index].good.price;
 						}
 						this.list[index].num++;
 						this.nums++;
-						this.price += this.list[index].price;
+						this.price += this.list[index].good.price;
 						for(var i = 0; i < cbxs.length; i++){
 							if(cbxs[i].checked==false){
 								return;
@@ -237,7 +236,7 @@
 						for(var i = 0; i < cbxs.length; i++){
 							if(cbxs[i].checked==false){
 								this.nums += this.list[i].num;
-								this.price += this.list[i].num*this.list[i].price;
+								this.price += this.list[i].num*this.list[i].good.price;
 							}
 							cbxs[i].checked = checked;
 						}
@@ -245,10 +244,10 @@
 						var check = document.getElementsByName("one");
 						if(check[index].checked==false){
 							this.nums -= this.list[index].num;
-							this.price -= this.list[index].num*this.list[index].price;
+							this.price -= this.list[index].num*this.list[index].good.price;
 						}else{
 							this.nums += this.list[index].num;
-							this.price += this.list[index].num*this.list[index].price;
+							this.price += this.list[index].num*this.list[index].good.price;
 						}
 						for(var i = 0; i < check.length; i++){
 							if(check[i].checked == false){
@@ -259,12 +258,12 @@
 						all.checked = true;
 					},del(index){
 						if(confirm("确认从购物车中移除吗")){
-							axios.get("delCart?gno="+this.list[index].gno).then(res=>{
+							axios.get("delCart?gno="+this.list[index].good.gno).then(res=>{
 								if(res.data.code==1){
 									$("#popup_info").text(res.data.msg);
 									showMsg();
 									this.nums -= this.list[index].num;
-									this.price -= this.list[index].num*this.list[index].price;
+									this.price -= this.list[index].num*this.list[index].good.price;
 									vsearch.nums -= 1;
 									axios.get("cart").then(res=>{
 										this.list = res.data;					
@@ -296,13 +295,29 @@
 							showMsg();
 							return;
 						}
+						
+						var params = new URLSearchParams();
+						var oid = 0;
+						/* for(c of this.list){
+							for(s of this.selected){
+								if(c.good.gno == s){
+									params.append("details["+i+"].gno",this.list[i].good.gno);
+									params.append("details["+i+"].nums",this.list[i].num);
+									params.append("details["+i+"].price",this.list[i].good.price);
+									i++;
+									break;
+								}
+							}
+						} */
 						for(var i = 0; i < check.length; i++){
 							if(check[i].checked == true){
-								this.href += "&gno="+this.list[i].gno;
-								this.href += "&nums="+ this.list[i].num;
+								params.append("details["+oid+"].gno",this.list[i].good.gno);
+								params.append("details["+oid+"].nums",this.list[i].num);
+								params.append("details["+oid+"].price",this.list[i].good.price);
+								oid++;
 							}
-						};
-						axios.get(this.href).then(res=>{
+						}; 					
+						axios.post("addOrd",params).then(res=>{
 							location.href = "pay.html";
 						});
 					}

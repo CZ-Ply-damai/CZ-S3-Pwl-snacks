@@ -2,6 +2,7 @@ package com.yc.sn.bean;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 public class Orderinfo implements java.io.Serializable {
 
@@ -19,7 +20,17 @@ public class Orderinfo implements java.io.Serializable {
 
     private Integer mno;
 
-    public Integer getOno() {
+    private List<Orderiteminfo> details;
+   
+	public List<Orderiteminfo> getDetails() {
+		return details;
+	}
+
+	public void setDetails(List<Orderiteminfo> details) {
+		this.details = details;
+	}
+
+	public Integer getOno() {
         return ono;
     }
 

@@ -16,34 +16,21 @@
 	src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
 </head>
 <script type="text/javascript">
-	function queryGood(){
-		console.info(vgood.tno);
-		axios.get("querygoods?tno="+vgood.tno+
-				"&pageIndex="+vgood.pageIndex+"&gname="+vtype.gname
-				)
-				//+"&num1="+vgood.num1+"&num2="+vgood.num2
-				.then(res=>{
-					if(res.data==""){
-						$("#popup_info").text("没有搜索到您要的结果..");
-						showMsg();
-						return;
-					}
-					vgood.list = res.data;
-		})
-	}
-	
-	
-	function queryPages(){
-		axios.get("countPage?tno="+vgood.tno+"&gname="+vtype.gname
-				+"&num1="+vgood.num1+"&num2="+vgood.num2).then(res=>{
-			vgood.count = res.data;
-			vgood.pages = parseInt(vgood.count/20);
-			if(vgood.count%20>0){
-				vgood.pages++;
-			}
-			queryGood();
-		})
-	}
+function queryGood(){
+	axios.get("querygoods?tno="+vgood.tno+
+			"&pageIndex="+vgood.pageIndex+"&gname="+vtype.gname
+			+"&num1="+vgood.num1+"&num2="+vgood.num2)
+			.then(res=>{
+				if(res.data.list.length==0){
+					$("#popup_info").text("没有搜索到您要的结果..");
+					showMsg();
+					vtype.gname="";
+					return;
+				}
+				vgood.list = res.data.list;
+				vgood.pages = res.data.pages;
+	})
+}
 	
 	var LocString=String(window.document.location.href);
 	 function GetQueryString(str){
@@ -67,7 +54,7 @@
                 <a href="register.html" title="点击注册"> 免费注册 </a>
             </div>
             <div v-if="!showname" class="login-info">
-            	<a href="#">{{list.nickName}}</a>
+            	<a href="#">{{list.nickname}}</a>
             	<a href="#" @click="back">退出</a>
             </div>
             
@@ -92,10 +79,10 @@
     			list:{},
     			showname:true,
     		},created(){
-    			axios.get("getName").then(res=>{  				
-    				if(res.data){
+    			axios.get("getName").then(res=>{
+    				if(res.data.data){
 						this.showname=false;
-						this.list=res.data;
+						this.list=res.data.data;
 					}else{
 						this.showname=true;						
 					}
@@ -153,8 +140,9 @@
             
             <div class="search_item" id="search_item">
             	<a href="index.html" :class="active == -1 ? 'selected' : ''" >全部</a>
-            	<a v-for="(s,index) in list" :value="index" :class = "active == index ? 'addclass' : ''" 
-            	:name="s.tno" :href="'index.html?' + Math.random() + '#' + s.tno" @click="changeStype(event,index)">{{s.tname}}</a>
+            	<a v-for="(s,index) in list" :value="index" :class = "active == index ? 'selected' : ''" 
+            	:name="s.tno" href="#" @click="changeStype(event,index)">{{s.tname}}</a>
+            <!-- :href="'index.html?' + Math.random() + '#' + s.tno" -->
             </div>
         </div>
     </div>
@@ -186,17 +174,18 @@
     				vgood.pageIndex = 1;
     				vgood.tno = "";
     				vgood.gname = this.gname;
-    				queryPages();
+    				queryGood();
     			},changeStype(e,index){
     				vgood.tno = e.target.name;
+
     				this.active = index;
-    				$(".selected").removeClass(".selected");
+    				//$(".selected").removeClass(".selected");
     				vgood.pageIndex = 1;  				
     				this.gname = "";
-    				axios.get("StypeGood?tno="+vgood.tno+"&pageIndex="+vgood.pageIndex)
-					.then(res=>{
-    					queryPages();
-    				})
+    				//axios.get("StypeGood?tno="+vgood.tno+"&pageIndex="+vgood.pageIndex)
+					//.then(res=>{
+    				queryGood();
+    				//})
     			},cart(){
     				if(vname.showname==true){
     					$("#popup_info").text("您还未登录...");
@@ -284,34 +273,19 @@
     		var name= decodeURI(GetQueryString("gn"));
 			this.gname = name;
 			vtype.gname = name;
-    		/* axios.get("countPage?tno="+this.tno+"&gname="+vtype.gname
-    				+"&num1="+this.num1+"&num2="+this.num2).then(res=>{
-    			this.count = res.data;
-    			this.pages = parseInt(this.count/20);
-				if(this.count%20>0){
-					this.pages++;
-				}
-				queryGood();
-				//this.pageIndex = 1;								
-    		})  */  
-    		/* var params = new URLSearchParams();
-			params.append("pageIndex",this.pageIndex);
-    		axios.post("querygoods",params).then(res=>{
-    			this.list = res.data;
-    		}) */
-    		axios.get("querygoods?tno="+this.tno+
-    				"&pageIndex="+this.pageIndex+"&gname="+vtype.gname
-    				)
-    				//+"&num1="+vgood.num1+"&num2="+vgood.num2
-    				.then(res=>{
-    					if(res.data==""){
-    						$("#popup_info").text("没有搜索到您要的结果..");
-    						showMsg();
-    						return;
-    					}
-    					this.list = res.data.list;
-    					this.pages = res.data.pages;
-    		})
+    		
+			axios.get("querygoods?tno="+this.tno+
+					"&pageIndex="+this.pageIndex+"&gname="+this.gname
+					+"&num1="+this.num1+"&num2="+this.num2)
+					.then(res=>{
+						if(res.data==""){
+							$("#popup_info").text("没有搜索到您要的结果..");
+							showMsg();
+							return;
+						}
+						this.list = res.data.list;
+						this.pages = res.data.pages;
+			})
     	},methods:{
     		changePage(e){
     			this.pageIndex = e.target.innerText;
@@ -325,7 +299,7 @@
     			}
         		queryGood();
     		},queryPrice(){
-    			queryPages();
+    			queryGood();
     		},addCart(index){
     			axios.get("addCart?gno="+this.list[index].gno+"&nums=1").then(res=>{
 					if(res.data.code==1){
@@ -351,6 +325,8 @@
 			}, 1000)
 		});
 	}
+    
+    
 </script>
 
 <div class="popup_con">
@@ -382,6 +358,8 @@ function addCart() {
 		}, 2000)
 	});
 }
+
+
 </script>
 </body>
 </html>
