@@ -30,10 +30,9 @@ public class CartAction {
 	@PostMapping("addC")
 	public Result addC(@RequestBody Cartinfo cart) {
 		CartinfoExample example = new CartinfoExample();
-		example.createCriteria().andMnoEqualTo(cart.getMno()).andGnoEqualTo(cart.getGno())
-								.andNumEqualTo(cart.getNum());
-		System.out.println(cim.updateByExample(cart, example));
-		if (cim.updateByExample(cart, example)==0) {
+		example.createCriteria().andMnoEqualTo(cart.getMno()).andGnoEqualTo(cart.getGno());
+		int i = cim.updateCart(cart);
+		if (i==0) {
 			cim.insert(cart);
 		}
 		return Result.success("添加成功", null);

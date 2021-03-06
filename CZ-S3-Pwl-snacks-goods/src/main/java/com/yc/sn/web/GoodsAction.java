@@ -77,7 +77,7 @@ public class GoodsAction {
 	}
 	
 	@PostMapping("goodsinfo")
-	public Goodsinfo queryGoodsById(int gno){
+	public Goodsinfo queryGoodsById(@RequestBody int gno){
 		GoodsinfoExample example = new GoodsinfoExample();
 		example.createCriteria().andGnoEqualTo(gno);
 		

@@ -122,22 +122,22 @@ public class IndexAction {
 	@SuppressWarnings("unchecked")
 	@RequestMapping("cart")
 	public List<Cartinfo> queryCart(HttpSession session){
-		System.out.println(session.getAttribute("loginedUser"));
 		Map<String, Object> map = new LinkedHashMap<>();
 		map = (Map<String, Object>) session.getAttribute("loginedUser");
 		Integer mno = (Integer) map.get("mno");
 		return ica.queryCart(mno);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@RequestMapping("addCart")
-	public Result addCart(Integer gno,Integer nums,@SessionAttribute Memberinfo loginedUser) {
-		System.out.println("11111");
-		System.out.println(loginedUser);
+	public Result addCart(Integer gno,Integer nums,HttpSession session) {
+		Map<String, Object> map = new LinkedHashMap<>();
+		map = (Map<String, Object>) session.getAttribute("loginedUser");
+		Integer mno = (Integer) map.get("mno");
 		Cartinfo cart = new Cartinfo();
 		cart.setGno(gno);
-		cart.setMno(loginedUser.getMno());
+		cart.setMno(mno);
 		cart.setNum(nums);
-		System.out.println(cart.getMno()+"==="+cart.getGno());
 		return ica.addC(cart);
 	}
 	

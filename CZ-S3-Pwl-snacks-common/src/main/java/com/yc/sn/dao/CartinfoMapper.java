@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 public interface CartinfoMapper {
     long countByExample(CartinfoExample example);
@@ -38,4 +39,7 @@ public interface CartinfoMapper {
     int updateByPrimaryKeySelective(Cartinfo record);
 
     int updateByPrimaryKey(Cartinfo record);
+    
+    @Update("update cartinfo set num = num + #{num} where mno = #{mno} and gno = #{gno}")
+    int updateCart(Cartinfo cart);
 }
