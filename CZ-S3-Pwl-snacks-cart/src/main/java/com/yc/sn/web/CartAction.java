@@ -1,5 +1,6 @@
 package com.yc.sn.web;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.yc.sn.bean.Cartinfo;
 import com.yc.sn.bean.CartinfoExample;
+import com.yc.sn.bean.Goodsinfo;
 import com.yc.sn.bean.Orderinfo;
 import com.yc.sn.bean.Orderiteminfo;
 import com.yc.sn.bean.Result;
@@ -40,6 +42,8 @@ public class CartAction {
 	
 	@PostMapping("addInfo")
 	public void addInfo(@RequestBody Orderinfo order) {
+		List<Goodsinfo> list = new ArrayList<>();
+		Cartinfo cart = new Cartinfo();
 		for(Orderiteminfo item : order.getDetails()) {
 			System.err.println(item.getGno()+"==="+item.getNums());
 		}

@@ -29,7 +29,7 @@
                 <a href="register.html" title="点击注册"> 免费注册 </a>
             </div>
             <div v-if="!showname" class="login-info">
-            	<a href="#">{{list.nickName}}</a>
+            	<a href="#">{{list.nickname}}</a>
             	<a href="#" @click="back">退出</a>
             </div>
             
@@ -54,9 +54,9 @@
     			showname:true,
     		},created(){
     			axios.get("getName").then(res=>{					
-    				if(res.data){
+    				if(res.data.data){
 						this.showname=false;
-						this.list=res.data;
+						this.list=res.data.data;
 					}else{
 						this.showname=true;
 						alert("请先登录");

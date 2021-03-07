@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.One;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -24,11 +25,15 @@ public interface CartinfoMapper {
 
     List<Cartinfo> selectByExample(CartinfoExample example);
     
-    @Select("select * FROM cartinfo where mno = 1")
+    @Select("select * FROM cartinfo where mno = #{mno}")
     @Results(id = "rmcart",value = {@Result(column = "gno",property = "gno"),
     		@Result(column = "gno",property = "good",
     		one = @One(select = "com.yc.sn.dao.GoodsinfoMapper.selectByPrimaryKey"))})
     List<Cartinfo> selectByMno(int mno);
+    
+    @Select("select * from cartinfo where mno = #{mno} and gno = #{gno}")
+    @ResultMap("rmcart")
+    List<Cartinfo> selectByMnoAndGno(Cartinfo cart);
 
     Cartinfo selectByPrimaryKey(Integer cno);
 

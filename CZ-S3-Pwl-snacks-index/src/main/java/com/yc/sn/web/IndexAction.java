@@ -2,6 +2,7 @@
 package com.yc.sn.web;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,7 @@ import com.yc.sn.bean.Goodsinfo;
 import com.yc.sn.bean.Goodstype;
 import com.yc.sn.bean.Memberinfo;
 import com.yc.sn.bean.Orderinfo;
+import com.yc.sn.bean.Orderiteminfo;
 import com.yc.sn.bean.Result;
 import com.yc.sn.bean.Utils;
 
@@ -142,9 +144,27 @@ public class IndexAction {
 	}
 	
 	@RequestMapping("addOrd")
-	public void addOrd(Orderinfo order) {
+	public void addOrd(Orderinfo order,HttpSession session) {
+		List<Integer> nlist = new ArrayList<>();
+		List<Goodsinfo> glist = new ArrayList<>();
+		for(Orderiteminfo item : order.getDetails()) {
+			nlist.add(item.getNums());
+			glist.add(iga.queryGoodsById(item.getGno()));
+		}
+		session.setAttribute("getGood", glist);
+		session.setAttribute("getNum", nlist);
 		ica.addInfo(order);
 
+	}
+	
+	@RequestMapping("getNums")
+	public Object getNums(HttpSession session){
+		return session.getAttribute("getNum");
+	}
+	
+	@RequestMapping("getGoods")
+	public Object getGoods(HttpSession session){
+		return session.getAttribute("getGood");
 	}
 	
 	@RequestMapping("sendvcode2")
