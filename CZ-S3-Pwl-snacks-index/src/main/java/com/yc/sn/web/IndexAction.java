@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
+import com.yc.sn.bean.Addrinfo;
+import com.yc.sn.bean.AddrinfoExample;
 import com.yc.sn.bean.BizException;
 import com.yc.sn.bean.Cartinfo;
 import com.yc.sn.bean.Goodsinfo;
@@ -26,6 +28,7 @@ import com.yc.sn.bean.Orderinfo;
 import com.yc.sn.bean.Orderiteminfo;
 import com.yc.sn.bean.Result;
 import com.yc.sn.bean.Utils;
+import com.yc.sn.dao.AddrinfoMapper;
 
 
 
@@ -40,6 +43,8 @@ public class IndexAction {
 	
 	@Resource
 	private ICartAction ica;
+	
+	
 	
 	@RequestMapping("login")
 	public Result login(Memberinfo m,HttpSession session,
@@ -171,6 +176,15 @@ public class IndexAction {
 	public void sendvcode2(String email,HttpSession session) {
 		String vcode=iua.sendvcode2(email);
 		session.setAttribute("vcode", vcode);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping("queryAddr")
+	public List<Addrinfo> queryAddr(HttpSession session){
+		Map<String, Object> map = new LinkedHashMap<>();
+		map = (Map<String, Object>) session.getAttribute("loginedUser");
+		Integer mno = (Integer) map.get("mno");
+		return iua.queryAddress(mno);
 	}
 }
 

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.yc.sn.bean.Addrinfo;
 import com.yc.sn.bean.Goodstype;
 import com.yc.sn.bean.Memberinfo;
 import com.yc.sn.bean.Result;
@@ -29,5 +30,8 @@ public interface IUserAction {
 	
 	@PostMapping("sendvcode2")
 	String sendvcode2(String email);
+	
+	@PostMapping("queryAddress")
+	List<Addrinfo> queryAddress(int mno);
 
 }
