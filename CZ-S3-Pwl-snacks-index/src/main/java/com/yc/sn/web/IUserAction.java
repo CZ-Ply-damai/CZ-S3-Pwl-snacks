@@ -33,5 +33,8 @@ public interface IUserAction {
 	
 	@PostMapping("queryAddress")
 	List<Addrinfo> queryAddress(int mno);
+	
+	@PostMapping("changeF")
+	Result changeF(Addrinfo addr);
 
 }

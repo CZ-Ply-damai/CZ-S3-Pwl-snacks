@@ -267,7 +267,7 @@
 					}
 				})
 			},addBuy(){
-				axios.get("addInfo?a=1&gno="+this.good.gno+"&nums="+this.sum).then(res=>{
+				axios.get("addinfo?gno="+this.good.gno+"&nums="+this.sum).then(res=>{
 					location.href = "pay.html";
 				})
 				//console.info(this.sum);

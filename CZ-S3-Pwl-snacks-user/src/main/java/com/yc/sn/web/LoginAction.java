@@ -49,5 +49,13 @@ public class LoginAction {
 		example.setOrderByClause("flag desc");
 		return aim.selectByExample(example);
 	}
+	
+	@PostMapping("changeF")
+	public Result changeF(@RequestBody Addrinfo addr) {
+		if (aim.updateByPrimaryKeySelective(addr)==1) {
+			return Result.success("修改成功", null);
+		}
+		return Result.failure("修改失败,请联系工作人员", null);
+	}
 
 }

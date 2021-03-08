@@ -148,6 +148,18 @@ public class IndexAction {
 		return ica.addC(cart);
 	}
 	
+	@SuppressWarnings("unchecked")
+	@RequestMapping("delCart")
+	public Result delCart(int gno,HttpSession session) {
+		Map<String, Object> map = new LinkedHashMap<>();
+		map = (Map<String, Object>) session.getAttribute("loginedUser");
+		Integer mno = (Integer) map.get("mno");
+		Cartinfo cart = new Cartinfo();
+		cart.setGno(gno);
+		cart.setMno(mno);
+		return ica.delC(cart);
+	}
+	
 	@RequestMapping("addOrd")
 	public void addOrd(Orderinfo order,HttpSession session) {
 		List<Integer> nlist = new ArrayList<>();
@@ -159,7 +171,16 @@ public class IndexAction {
 		session.setAttribute("getGood", glist);
 		session.setAttribute("getNum", nlist);
 		ica.addInfo(order);
-
+	}
+	
+	@RequestMapping("addinfo")
+	public void addInfo(int gno,int nums,HttpSession session) {
+		List<Integer> nlist = new ArrayList<>();
+		List<Goodsinfo> glist = new ArrayList<>();
+		nlist.add(nums);
+		glist.add(iga.queryGoodsById(gno));
+		session.setAttribute("getGood", glist);
+		session.setAttribute("getNum", nlist);
 	}
 	
 	@RequestMapping("getNums")
@@ -185,6 +206,14 @@ public class IndexAction {
 		map = (Map<String, Object>) session.getAttribute("loginedUser");
 		Integer mno = (Integer) map.get("mno");
 		return iua.queryAddress(mno);
+	}
+	
+	@RequestMapping("changeFlag")
+	public Result changeFlag(int ano,int flag) {
+		Addrinfo addr = new Addrinfo();
+		addr.setAno(ano);
+		addr.setFlag(flag);
+		return iua.changeF(addr);
 	}
 }
 

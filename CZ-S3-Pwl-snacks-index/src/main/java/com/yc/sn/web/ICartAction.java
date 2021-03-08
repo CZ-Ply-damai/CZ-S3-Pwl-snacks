@@ -18,6 +18,9 @@ public interface ICartAction {
 	@PostMapping("addC")
 	public Result addC(Cartinfo cart);
 	
+	@PostMapping("delC")
+	public Result delC(Cartinfo cart);
+	
 	@PostMapping("addInfo")
 	public void addInfo(Orderinfo order);
 }

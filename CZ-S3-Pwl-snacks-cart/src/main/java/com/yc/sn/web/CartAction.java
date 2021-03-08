@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.yc.sn.bean.Cartinfo;
@@ -38,6 +39,16 @@ public class CartAction {
 			cim.insert(cart);
 		}
 		return Result.success("添加成功", null);
+	}
+	
+	@PostMapping("delC")
+	public Result delC(@RequestBody Cartinfo cart) {
+		CartinfoExample example = new CartinfoExample();
+		example.createCriteria().andMnoEqualTo(cart.getMno()).andGnoEqualTo(cart.getGno());
+		if (cim.deleteByExample(example)==1) {
+			return Result.success("删除成功", null);
+		}
+		return Result.failure("删除失败,请联系工作人员", null);
 	}
 	
 	@PostMapping("addInfo")
